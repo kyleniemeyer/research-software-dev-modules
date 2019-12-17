@@ -1,0 +1,531 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-markdown>
+					<textarea data-template>
+						## Basics of packaging Python programs
+					</textarea>
+				</section>
+
+				<section>
+					<h2>(Python) packaging</h1>
+					<br/>
+					<p><strong>module:</strong> Python file (<code>.py</code>) that contains definitions and statements.</p>
+					<p><strong>package:</strong> a collection of modules in the same directory</p>
+					<br/>
+					<p class="fragment">Package directory must contain <code>__init__.py</code> for Python to "see" it*</p>
+					<p class="fragment">* ... Not true with <a href="https://www.python.org/dev/peps/pep-0420/">namespace packages</a></p>
+				</section>
+
+				<section>
+					<section>
+						<h3><code>compphys</code> package structure:</h3>
+						<br/>
+						<pre><code data-trim>
+							compphys/
+							|-- __init__.py
+							|-- constants.py
+							|-- physics.py
+							|-- more/
+							|   |-- __init__.py
+							|   |-- morephysics.py
+							|   |-- evenmorephysics.py
+							|-- assets/
+							|   |-- data.txt
+							|   |-- orphan.py
+							|-- tests/
+							|   |-- test_physics.py
+							|   |-- test_morephysics.py
+							...
+						</code></pre>
+					</section>
+
+					<section>
+						<h4><code>compphys</code> contents:</h4>
+						<br/>
+						<ul>
+							<li class="fragment"><code>__init__.py</code>:
+								tells Python this is a package; typically empty. Executed before any other modules imported.
+							</li>
+							<li class="fragment">Two modules: <code>constants.py</code> and <code>physics.py</code>
+							</li>
+							<li class="fragment"><code>more</code> is a submodule
+							</li>
+							<li class="fragment"><code>raw</code> is a subdirectory;
+								not a submodule since it doesn't have <code>__init__.py</code> (<code>orphan.py</code> is unreachable!)
+							</li>
+							<li class="fragment"><code>tests</code>: subdirectory with tests
+							</li>
+						</ul>
+					</section>
+				</section>
+				
+				<section>
+					<section>
+						<h3>Importing submodules</h3>
+						<br/>
+						<p>Use attribute access operator: <code>.</code></p>
+
+						<pre><code data-trim class="fragment python">
+							import compphys.constants
+							import compphys.more.morephysics
+
+							two_pi = 2 * compphys.constants.pi
+						</code></pre>
+
+						<p class="fragment">These are <strong>absolute imports</strong></p>
+					</section>
+
+					<section>
+						<h3>Explicit relative imports</h3>
+						<br/>
+						<p class="fragment">From <code>physics.py</code>:
+
+						<pre><code data-trim class="python fragment">
+							from . import constants
+							from .constants import pi, h
+							from .more import morephysics
+						</code></pre>
+						</p>
+
+						<p class="fragment">From <code>evenmorephysics.py</code>:
+
+						<pre><code data-trim class="python fragment">
+							from . import morephysics
+							from .. import constants
+							from ..constants import pi, h
+						</code></pre>
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<h3>Important: while easy to create new functions and modules, don't reinvent the wheel!</h3>
+					<br/>
+					<p class="fragment">Rely on the Python standard library, NumPy, SciPy, etc. as much as you need.</p>
+				</section>
+
+				<section>
+					<section data-markdown>
+						<textarea data-template>
+							## `main()` and `__main__`
+
+							- `__name__ == __main__`, when the file is executed from the command line
+							- `__name__ == ` module name, when imported
+							- use `main()` as name of entry point function to overall package (this is convention)
+							- Define most logic in functions outside `main()` and call those
+						</textarea>
+					</section>
+
+					<section>
+						<div style="font-size:30px">
+						<pre class="stretch"><code data-trim class="python">
+							from time import sleep
+							print("This is my file to demonstrate best practices.")
+
+							def process_data(data):
+								print("Beginning data processing...")
+								modified_data = data + " that has been modified"
+								sleep(3)
+								print("Data processing finished.")
+								return modified_data
+
+							def read_data_from_web():
+								print("Reading data from the Web")
+								data = "Data from the web"
+								return data
+
+							def write_data_to_database(data):
+								print("Writing data to a database")
+								print(data)
+
+							def main():
+								data = read_data_from_web()
+								modified_data = process_data(data)
+								write_data_to_database(modified_data)
+
+							if __name__ == "__main__":
+								main()
+						</code></pre>
+						</div>
+						<p>Source: <a href="https://realpython.com/python-main-function/">https://realpython.com/python-main-function/</a></p>
+					</section>
+				</section>
+				<section>
+					<section>
+                        <h2>Package management options</h2>
+                        <br>
+                        <ul>
+                            <li class="fragment">
+                                Source-based: link to code. Good for dynamic languages, less for compiled.
+                            </li>
+                            <li class="fragment">
+                                Binary: popular for both dynamic and compiled. Create packages for various architectures/systems.
+                            </li>
+                            <li class="fragment">
+                                Virtualization: package both software and environment.
+                            </li>
+                        </ul>
+					</section>
+					
+					<section>
+                        <h2> Python: <code>pip</code> and PyPI </h2>
+                        <br>
+                        <ul>
+                            <li class="fragment">
+                                <code>pip</code> can be used to install Python packages from source or from <a href="https://pypi.org">PyPI</a>
+                            </li>
+                            <li class="fragment">
+                                We will tell <code>pip</code> how to install your package by creating a <code>setup.py</code>
+                                file for the <code>setuptools</code> package to use.
+                            </li>
+                            <li class="fragment">
+                                <code>setup.py</code> goes at the same level as your package's source code directory.
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <div style="font-size:35px">
+                        <pre class="stretch"><code data-trim class="text">
+						setup.py
+						compphys/
+						|--  __init__.py
+						|-- _version.py
+						|-- constants.py
+						|-- physics.py
+						|-- more/
+						|   |-- __init__.py
+						|   |-- morephysics.py
+						|   |-- evenmorephysics.py
+						|-- assets/
+						|   |-- data.txt
+						|   |-- orphan.py
+						|-- tests/
+						|   |-- test_physics.py
+						|   |-- test_morephysics.py
+						LICENSE
+						README.md
+						CHANGELOG.md
+						CONTRIBUTING.md 
+						CODE_OF_CONDUCT.md
+                        </code></pre>
+                        </div>
+                    </section>
+
+                    <section>
+                        <p>
+                            <code>setup.py</code> imports and calls <code>setup()</code> function, which can both install
+                            a package locally and make/upload to PyPI
+                        </p>
+                    </section>
+
+                    <section>
+                        <div style="font-size:25px">
+                        <pre><code data-trim class="python stretch">
+							from setuptools import setup
+							
+							setup(
+								name='compphys',
+								version='0.1.0',
+								description='Effective Computation in Physics',
+								author='Anthony Scopatz and Kathryn D. Huff',
+								author_email='koolkatz@gmail.com',
+								url='http://physics.codes',
+								classifiers=[
+									'License :: OSI Approved :: BSD License',
+									'Intended Audience :: Developers',
+									'Intended Audience :: Science/Research',
+									'Natural Language :: English',
+									'Programming Language :: Python :: 3',
+								],
+								license='BSD-3-Clause',
+								python_requires='>=3',
+								zip_safe=False,
+								packages=['compphys', 'compphys.more', 'compphys.tests'],
+								# or find automatically:
+								# packages=find_packages(),
+								package_dir={
+									'compphys': 'compphys',
+									'compphys.more': 'compphys/more',
+									'compphys.tests': 'compphys/tests',
+									},
+								#
+								include_package_data=True,
+								# or you can specify explicitly:
+								package_data={
+									'compphys': ['assets/*.txt']
+									},
+								)
+                        </code></pre>
+                        </div>
+                    </section>
+
+                    <section>
+						<h3>Better:</h3>
+						<ul>
+                            <li class="fragment">
+								Have <code>setup.py</code> copy in README, version information from
+                            	<code>_version.py</code> file in your package, and include dependency information.
+                            </li>
+							<li class="fragment">
+								Add a <code>setup.cfg</code> file with some additional configuration options
+							</li>
+							<li class="fragment">
+								Add a <a href="https://keepachangelog.com/"<code>CHANGELOG</code> file</a> to describe how your
+								code changes with each version.
+							</li>
+							<li class="fragment">
+								Add a <code>MANIFEST.in</code> file to tell PyPI to bring other files.
+							</li>
+                    </section>
+
+                    <section>
+                        <div style="font-size:25px">
+                        <pre><code data-trim class="python">
+						from setuptools import setup
+						from codecs import open
+						from os import path
+						import sys
+
+						here = path.abspath(path.dirname(__file__))
+						
+						version = {}								
+						with open(path.join(here, 'compphys', '_version.py')) as version_file:
+							exec(version_file.read(), version)
+						__version__ = version['__version__']
+
+						with open(path.join(here, 'README.md')) as readme_file:
+							readme = readme_file.read()
+
+						with open(path.join(here, 'CHANGELOG.md')) as changelog_file:
+							changelog = changelog_file.read()
+						
+						long_description = readme + '\n\n' + changelog
+
+						install_requires = [
+							'numpy',
+						]
+
+						tests_require = [
+							'pytest',
+							'pytest-cov',
+						]
+
+						needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
+						setup_requires = ['pytest-runner'] if needs_pytest else []
+
+						setup(
+							name='compphys',
+							version=__version__,
+							description='Effective Computation in Physics',
+							long_description=long_description,
+							author='Anthony Scopatz and Kathryn D. Huff',
+							author_email='koolkatz@gmail.com',
+							url='http://physics.codes',
+							classifiers=[
+								'License :: OSI Approved :: BSD License',
+								'Intended Audience :: Developers',
+								'Intended Audience :: Science/Research',
+								'Natural Language :: English',
+								'Programming Language :: Python :: 3',
+							],
+							license='BSD-3-Clause',
+							install_requires=install_requires,
+							tests_require=tests_require,
+							python_requires='>=3',
+							setup_requires=setup_requires,
+							zip_safe=False,
+							packages=['compphys', 'compphys.more', 'compphys.tests'],
+							package_dir={
+								'compphys': 'compphys',
+								'compphys.more': 'compphys/more',
+								'compphys.tests': 'compphys/tests',
+								},
+							include_package_data=True,
+						)
+                        </code></pre>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h3>Contents of <code>_version.py</code>:</h3>
+                        <br>
+                        <pre><code data-trim class="python">
+						__version_info__ = (0, 1, 0, 'a0')
+						__version__ = '.'.join(map(str, __version_info__[:3]))
+						if len(__version_info__) == 4:
+							__version__ += __version_info__[-1]
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Contents of <code>CHANGELOG.md</code>:</h3>
+                        <br>
+                        <div style="font-size:20px">
+                        <pre><code data-trim class="markdown">
+						# Changelog
+						All notable changes to this project will be documented in this file.
+
+						The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+						and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
+						## [Unreleased]
+
+						## [0.1.0] - 2015-10-06
+						### Added
+						- Answer "Should you ever rewrite a change log?".
+
+						### Changed
+						- Improve argument against commit logs.
+						- Start following [SemVer](http://semver.org) properly.
+
+						## [0.0.8] - 2015-02-17
+						### Changed
+						- Update year to match in every README example.
+						- Reluctantly stop making fun of Brits only, since most of the world
+							writes dates in a strange way.
+
+						### Fixed
+						- Fix typos in recent README changes.
+						- Update outdated unreleased diff link.
+
+						## [0.0.7] - 2015-02-16
+						### Added
+						- Link, and make it obvious that date format is ISO 8601.
+
+						### Changed
+						- Clarified the section on "Is there a standard change log format?".
+
+						### Fixed
+						- Fix Markdown links to tag comparison URL with footnote-style links.
+
+						## [0.0.6] - 2014-12-12
+						### Added
+						- README section on "yanked" releases.
+
+						## [0.0.5] - 2014-08-09
+						### Added
+						- Markdown links to version tags on release headings.
+						- Unreleased section to gather unreleased changes and encourage note
+						keeping prior to releases.
+
+						## [0.0.4] - 2014-08-09
+						### Added
+						- Better explanation of the difference between the file ("CHANGELOG")
+						and its function "the change log".
+
+						### Changed
+						- Refer to a "change log" instead of a "CHANGELOG" throughout the site
+						to differentiate between the file and the purpose of the file — the
+						logging of changes.
+
+						### Removed
+						- Remove empty sections from CHANGELOG, they occupy too much space and
+						create too much noise in the file. People will have to assume that the
+						missing sections were intentionally left out because they contained no
+						notable changes.
+
+						## [0.0.3] - 2014-08-09
+						### Added
+						- "Why should I care?" section mentioning The Changelog podcast.
+
+						## [0.0.2] - 2014-07-10
+						### Added
+						- Explanation of the recommended reverse chronological release ordering.
+
+						## 0.0.1 - 2014-05-31
+						### Added
+						- This CHANGELOG file to hopefully serve as an evolving example of a
+							standardized open source project CHANGELOG.
+						- CNAME file to enable GitHub Pages custom domain
+						- README now contains answers to common questions about CHANGELOGs
+						- Good examples and basic guidelines, including proper date formatting.
+						- Counter-examples: "What makes unicorns cry?"
+
+						[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v1.0.0...HEAD
+						[0.1.0]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.8...v0.1.0
+						[0.0.8]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.7...v0.0.8
+						[0.0.7]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.6...v0.0.7
+						[0.0.6]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.5...v0.0.6
+						[0.0.5]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.4...v0.0.5
+						[0.0.4]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.3...v0.0.4
+						[0.0.3]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.2...v0.0.3
+						[0.0.2]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.1...v0.0.2
+                        </code></pre>
+                        </div>
+					</section>
+
+
+                    <section>
+                        <ol>
+                        <li class="fragment">
+                            Install the package from source: <code>python setup.py install</code>
+                        </li>
+                        <li class="fragment">
+                            Or, install using pip: <code>pip install &lt;path&gt;</code>
+						</li>
+						<li class="fragment">
+                            Can also install in development mode: <code>pip install -e &lt;path&gt;</code>
+                        </li>
+                        <ol>
+                    </section>
+                    <section>
+                        <p>
+                            <a href="https://semver.org">Semantic Versioning</a>: Given a version number MAJOR.MINOR.PATCH, increment the:
+                        </p>
+                        <ul class="fragment">
+                            <li>MAJOR version when you make incompatible API changes,</li>
+                            <li>MINOR version when you add functionality in a backwards-compatible manner, and</li>
+                            <li>PATCH version when you make backwards-compatible bug fixes.</li>
+                        </ul>
+                        <p class="fragment">
+                            To start: set initial development release at 0.1.0 and increment minor version for subsequent releases.
+                        </p>
+                    </section>
+				</section>
+
+			</div>
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true }
+				]
+			});
+		</script>
+	</body>
+</html>
