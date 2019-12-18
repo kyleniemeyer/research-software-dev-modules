@@ -395,6 +395,18 @@
 					</section>
 
 					<section>
+						<p>Test raising exceptions</p>
+
+						<pre class="stretch"><code data-trim class="python">
+							import pytest
+
+							def test_zero_division():
+    							with pytest.raises(ZeroDivisionError):
+        							1 / 0
+						</code></pre>
+					</section>
+
+					<section>
 						<h3>Mocking in unit tests</h3>
 						
 						<ul>
