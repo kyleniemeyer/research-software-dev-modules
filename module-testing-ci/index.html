@@ -68,6 +68,23 @@
 						<p class="fragment"><small>And we all know how easy it is to have mistakes in code without realizing it...</small>
 						</p>
 					</section>
+
+					<section>
+						<p class="fragment">
+							Testing is particularly important if you want contributions to your codebase.
+						</p>
+						<ul>
+							<li class="fragment">
+								As a contributor, how do I know if my PR hasn’t broken anything?
+							</li>
+							<li class="fragment">
+								As a commiter, how do I know if your PR is ok?
+							</li>
+							<li class="fragment">
+								Unit tests are often a great repository of how different features of a library actually work
+							</li>
+						</ul>
+					</section>
 				</section>
 				<section>
 					<section>
@@ -252,6 +269,17 @@
 							</li>
 						</ul>
 					</section>
+
+					<section>
+						<p>Developers warn against having unit tests without any integration tests</p>
+						<img width="40%" data-src="./images/unit-tests-dryer.gif">
+						<img width="40%" data-src="./images/unit-tests-doors.gif">
+						
+						<small>
+							Sources: <a href="https://twitter.com/thepracticaldev/status/845638950517706752">twitter/@ThePracticalDev</a>,
+							<a href="https://twitter.com/withzombies/status/829716565834752000">twitter/@withzombies</a>
+						</small>
+					</section>
 				</section>
 
 				<section>
@@ -351,6 +379,75 @@
 						</div>
 					</section>
 				</section>
+
+				<section>
+					<section>
+						<h2>Other testing tips</h2>
+						<br/>
+						<p class="fragment">Consider <a href="https://pep8.org">PEP8</a> 
+							testing to ensure consistency in your codebase, 
+							regardless of the number of people contributing.
+						</p>
+						<pre><code data-trim class="bash fragment">
+							pip install flake8
+							flake8 .
+						</code></pre>
+					</section>
+
+					<section>
+						<h3>Mocking in unit tests</h3>
+						
+						<ul>
+							<li class="fragment">
+								Mocks allow you replace parts of your system with precisely controllable code
+								<ul>
+									<li>Specify return values</li>
+									<li>Throw exceptions</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Assertions to Verify mock interactions
+								<ul>
+									<li>Was the method called?</li>
+									<li>Was it called with the expected arguments?</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								A good unit test should only exercise the code in your module and mock out all dependencies
+							</li>
+						</ul>
+					</section>
+					<section>
+						<p>Example with mocking:</p>
+						<div style="font-size:35px">
+						<pre class="stretch"><code data-trim class="python">
+							def test_create_update_path(self, mocker):
+								import elasticsearch
+								mock_es = mocker.MagicMock(elasticsearch.Elasticsearch)
+								mocker.patch.object(
+									elasticsearch, 'Elasticsearch', return_value=mock_es
+									)
+								adaptor = ElasticSearchAdapter('localhost', '9999', 'foo', 'bar')
+
+								adaptor.create_update_path("123-456", {
+									'name': 'my-nane',
+									'description': 'this is a test'
+								})
+
+								mock_es.index.assert_called_with(
+									body={
+										'name': 'my-name',
+										'description': 'this is a test'
+									},
+									index='servicex_paths',
+									id='123-456',
+								)
+						</code></pre>
+						</div>
+					</section>
+
+				</section>
+
 				<section>
 					<section>
 						<h2>Test coverage</h2>
@@ -455,7 +552,29 @@
                         <p class="fragment">Meaning: ensure all changes to your project pass tests through automated
                             test & build process
                         </p>
-                    </section>
+					</section>
+					
+					<section>
+						<h2>Importance of testing + continuous integration</h2>
+
+						<img class="plain" width="60%" src="./images/chemical-shifts-paper.png"/>
+
+						<small>
+							<a href="https://doi.org/10.1021/acs.orglett.9b03216"><code>https://doi.org/10.1021/acs.orglett.9b03216</code></a>
+						</small>
+					</section>
+
+					<section>
+						<p class="fragment">
+							Recent paper found differences in calculated nuclear magnetic resonance chemical shifts on different operating systems
+						</p>
+						<p class="fragment">
+							Using Python scripts published in Nature Protocols in 2014, cited over 130 times
+						</p>
+						<p class="fragment">
+							Error due to differences in file sorting across platforms… 
+						</p>
+					</section>
 
                     <section>
                         <h3>Getting started with <a href="https://travis-ci.org">Travis CI</a>:</h3>
