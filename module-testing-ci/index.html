@@ -92,24 +92,22 @@
 						<br/>
 
 						<pre><code data-trim class="python fragment">
-							def kepler_loc(p1, p2, dt, t):
-								'''Use Kepler's Laws to predict location of 
-								celestial body'''
-								...
-								return p3
+                            def kepler_loc(p1, p2, dt, t):
+                                '''Use Kepler's Laws to predict location of 
+                                celestial body'''
+                                ...
+                                return p3
 						</code></pre>
 
 						<br/>
 						<pre><code data-trim class="python fragment">
-							def test_kepler_loc():
-								p1 = jupiter(two_days_ago)
-								p2 = jupiter(yesterday)
-								exp = jupiter(today)
-								obs = kepler_loc(p1, p2, 1, 1)
-								if exp != obs:
-									raise ValueError(
-										"Jupiter is not where it should be!"
-										)
+                            def test_kepler_loc():
+                                p1 = jupiter(two_days_ago)
+                                p2 = jupiter(yesterday)
+                                exp = jupiter(today)
+                                obs = kepler_loc(p1, p2, 1, 1)
+                                if exp != obs:
+                                    raise ValueError("Jupiter is not where it should be!")
 						</code></pre>
 					</section>
 
@@ -125,10 +123,10 @@
 						</blockquote>
 
 						<pre><code data-trim class="python fragment">
-							def test_func():
-								exp = get_expected()
-								obs = func(*args, **kwargs)
-								assert exp == obs
+                            def test_func():
+                                exp = get_expected()
+                                obs = func(*args, **kwargs)
+                                assert exp == obs
 						</code></pre>
 					</section>
 
@@ -137,22 +135,22 @@
 
 						<p class="fragment">For exactness:</p>
 						<pre><code data-trim class="python fragment">
-							def test_kepler_loc():
-								p1 = jupiter(two_days_ago)
-								p2 = jupiter(yesterday)
-								exp = jupiter(today)
-								obs = kepler_loc(p1, p2, 1, 1) 
-								assert exp == obs
+                            def test_kepler_loc():
+                                p1 = jupiter(two_days_ago)
+                                p2 = jupiter(yesterday)
+                                exp = jupiter(today)
+                                obs = kepler_loc(p1, p2, 1, 1)
+                                assert exp == obs
 						</code></pre>
 						<p class="fragment">For approximate exactness:</p>
 						<pre><code data-trim class="python fragment">
-							import numpy as np
-							def test_kepler_loc():
-								p1 = jupiter(two_days_ago)
-								p2 = jupiter(yesterday)
-								exp = jupiter(today)
-								obs = kepler_loc(p1, p2, 1, 1) 
-								assert np.allclose(exp, obs)
+                            import numpy as np
+                            def test_kepler_loc():
+                                p1 = jupiter(two_days_ago)
+                                p2 = jupiter(yesterday)
+                                exp = jupiter(today)
+                                obs = kepler_loc(p1, p2, 1, 1)
+                                assert np.allclose(exp, obs)
 						</code></pre>
 					</section>
 
@@ -161,12 +159,12 @@
 						<br/>
 
 						<pre><code data-trim class="python fragment">
-							# content of test_sample.py
-							def inc(x):
-								return x + 1
-
-							def test_answer():
-								assert inc(3) == 5
+                            # content of test_sample.py
+                            def inc(x):
+                                return x + 1
+                            
+                            def test_answer():
+                                assert inc(3) == 5
 						</code></pre>
 
 						<pre><code data-trim class="bash fragment">
@@ -191,44 +189,44 @@
 						<p class="fragment">Also <strong>corner cases</strong>: two or more edge cases combined.</p>
 						<br/>
 						<pre><code data-trim class="python fragment">
-							import numpy as np
-
-							def sinc2d(x, y):
-								'''(Describe the function here)'''
-								if x == 0.0 and y == 0.0:
-									return 1.0
-								elif x == 0.0:
-									return np.sin(y) / y
-								elif y == 0.0:
-									return np.sin(x) / x
-								else:
-									return (np.sin(x) / x) * (np.sin(y) / y)
+                            import numpy as np
+                            
+                            def sinc2d(x, y):
+                                '''(Describe the function here)'''
+                                if x == 0.0 and y == 0.0:
+                                    return 1.0
+                                elif x == 0.0:
+                                    return np.sin(y) / y
+                                elif y == 0.0:
+                                    return np.sin(x) / x
+                                else:
+                                    return (np.sin(x) / x) * (np.sin(y) / y)
 						</code></pre>
 					</section>
 
 					<section>
 						<pre><code data-trim class="python">
-							import numpy as np
-							from mod import sinc2d
+                            import numpy as np
+                            from mod import sinc2d
 
-							def def test_internal():
-								exp = (2.0 / np.pi) * (-2.0 / (3.0 * np.pi))
-								obs = sinc2d(np.pi / 2.0, 3.0 * np.pi / 2.0)
-								assert np.allclose(exp, obs)
-							def test_edge_x():
-								exp = (-2.0 / (3.0 * np.pi))
-								obs = sinc2d(0.0, 3.0 * np.pi / 2.0)
-								assert np.allclose(exp, obs)
+                            def def test_internal():
+                                exp = (2.0 / np.pi) * (-2.0 / (3.0 * np.pi))
+                                obs = sinc2d(np.pi / 2.0, 3.0 * np.pi / 2.0)
+                                assert np.allclose(exp, obs)
+                            def test_edge_x():
+                                exp = (-2.0 / (3.0 * np.pi))
+                                obs = sinc2d(0.0, 3.0 * np.pi / 2.0)
+                                assert np.allclose(exp, obs)
 						</code></pre>
 						<pre><code data-trim class="python">
-							def test_edge_y():
-								exp = (2.0 / np.pi)
-								obs = sinc2d(np.pi / 2.0, 0.0)
-								assert np.allclose(exp, obs)
-							def test_corner():
-								exp = 1.0
-								obs = sinc2d(0.0, 0.0)
-								assert np.allclose(exp, obs)
+                            def test_edge_y():
+                                exp = (2.0 / np.pi)
+                                obs = sinc2d(np.pi / 2.0, 0.0)
+                                assert np.allclose(exp, obs)
+                            def test_corner():
+                                exp = 1.0
+                                obs = sinc2d(0.0, 0.0)
+                                assert np.allclose(exp, obs)
 						</code></pre>
 					</section>
 
@@ -236,23 +234,23 @@
 						<h3>Test generators</h3>
 	
 						<pre class="stretch"><code data-trim class="python">
-							import numpy as np
-							import pytest
+                            import numpy as np
+                            import pytest
+                            
+                            # contents of add.py
+                            def add2(x, y):
+                                return x + y
 	
-							# contents of add.py
-							def add2(x, y):
-								return x + y
-	
-							@pytest.mark.parametrize('exp, x, y', [
-								(4, 2, 2),
-								(5, -5, 10),
-								(42, 40, 2),
-								(16, 3, 13),
-								(-128, 0, -128),
-							])
-							def test_add2(self, x, y, exp):
-								obs = add2(x, y)
-								assert np.allclose(exp, obs)
+                            @pytest.mark.parametrize('exp, x, y', [
+                                (4, 2, 2),
+                                (5, -5, 10),
+                                (42, 40, 2),
+                                (16, 3, 13),
+                                (-128, 0, -128),
+                            ])
+                            def test_add2(self, x, y, exp):
+                                obs = add2(x, y)
+                                assert np.allclose(exp, obs)
 						</code></pre>
 					</section>
 
@@ -292,88 +290,88 @@
 
 					<section>
 						<pre><code data-trim class="python">
-							from numpy import allclose
-							from mod import std
+                            from numpy import allclose
+                            from mod import std
 
-							def test_std1():
-								obs = std([0.0, 2.0])
-								exp = 1.0
-								assert np.allclose(exp, obs)
+                            def test_std1():
+                                obs = std([0.0, 2.0])
+                                exp = 1.0
+                                assert np.allclose(exp, obs)
 						</code></pre>
 
 						<pre><code data-trim class="python fragment">
-							def std(vals):
-								# this must be cheating.
-								return 1.0
+                            def std(vals):
+                                # this must be cheating.
+                                return 1.0
 						</code></pre>
 					</section>
 
 					<section>
 						<pre><code data-trim class="python">
-							def test_std1():
-								obs = std([0.0, 2.0])
-								exp = 1.0
-								assert np.allclose(exp, obs)
+                            def test_std1():
+                                obs = std([0.0, 2.0])
+                                exp = 1.0
+                                assert np.allclose(exp, obs)
 
-							def test_std2():
-								obs = std()
-								exp = 0.0
-								assert np.allclose(exp, obs)
+                            def test_std2():
+                                obs = std()
+                                exp = 0.0
+                                assert np.allclose(exp, obs)
 
-							def test_std3():
-								obs = std([0.0, 4.0])
-								exp = 2.0
-								assert np.allclose(exp, obs)
+                            def test_std3():
+                                obs = std([0.0, 4.0])
+                                exp = 2.0
+                                assert np.allclose(exp, obs)
 						</code></pre>
 
 						<pre><code data-trim class="python fragment">
-							def std(vals):
-								# a bit better, but still not quite generic
-								if len(vals) == 0:
-									return 0.0
-								return vals[-1] / 2.0
+                            def std(vals):
+                                # a bit better, but still not quite generic
+                                if len(vals) == 0:
+                                    return 0.0
+                                return vals[-1] / 2.0
 						</code></pre>
 					</section>
 
 					<section>
 						<div style="font-size:25px">
 						<pre class="stretch"><code data-trim class="python">
-							def test_std1():
-								obs = std([0.0, 2.0])
-								exp = 1.0
-								assert np.allclose(exp, obs)
+                            def test_std1():
+                                obs = std([0.0, 2.0])
+                                exp = 1.0
+                                assert np.allclose(exp, obs)
 
-							def test_std2():
-								obs = std()
-								exp = 0.0
-								assert np.allclose(exp, obs)
+                            def test_std2():
+                                obs = std()
+                                exp = 0.0
+                                assert np.allclose(exp, obs)
 
-							def test_std3():
-								obs = std([0.0, 4.0])
-								exp = 2.0
-								assert np.allclose(exp, obs)
+                            def test_std3():
+                                obs = std([0.0, 4.0])
+                                exp = 2.0
+                                assert np.allclose(exp, obs)
 
-							def test_std4():
-								obs = std([1.0, 3.0])
-								exp = 1.0
-								assert np.allclose(exp, obs)
+                            def test_std4():
+                                obs = std([1.0, 3.0])
+                                exp = 1.0
+                                assert np.allclose(exp, obs)
 
-							def test_std4():
-								obs = std([1.0, 1.0, 1.0])
-								exp = 0.0
-								assert np.allclose(exp, obs)
+                            def test_std4():
+                                obs = std([1.0, 1.0, 1.0])
+                                exp = 0.0
+                                assert np.allclose(exp, obs)
 						</code></pre>
 						<pre><code data-trim class="python fragment">
-							def std(vals):
-								# finally some math
-								n = len(vals)
-								if n == 0:
-									reutnr 0.0
-								mu = sum(vals) / n
-								var = 0.0
-								for val in vals:
-									var = var + (val - mu)**2
-								return (var / n)**0.5
+                            def std(vals):
+                                # finally some math
+                                n = len(vals)
+                                if n == 0:
+                                    return 0.0
+                                mu = sum(vals) / n
+                                var = 0.0
+                                for val in vals:
+                                    var = var + (val - mu)**2
+                                return (var / n)**0.5
 						</code></pre>
 						</div>
 					</section>
@@ -388,8 +386,8 @@
 							regardless of the number of people contributing.
 						</p>
 						<pre><code data-trim class="bash fragment">
-							pip install flake8
-							flake8 .
+                            pip install flake8
+                            flake8 .
 						</code></pre>
 					</section>
 
@@ -431,27 +429,27 @@
 						<p>Example with mocking:</p>
 						<div style="font-size:35px">
 						<pre class="stretch"><code data-trim class="python">
-							def test_create_update_path(self, mocker):
-								import elasticsearch
-								mock_es = mocker.MagicMock(elasticsearch.Elasticsearch)
-								mocker.patch.object(
-									elasticsearch, 'Elasticsearch', return_value=mock_es
-									)
-								adaptor = ElasticSearchAdapter('localhost', '9999', 'foo', 'bar')
+                            def test_create_update_path(self, mocker):
+                                import elasticsearch
+                                mock_es = mocker.MagicMock(elasticsearch.Elasticsearch)
+                                mocker.patch.object(
+                                    elasticsearch, 'Elasticsearch', return_value=mock_es
+                                    )
+                                adaptor = ElasticSearchAdapter('localhost', '9999', 'foo', 'bar')
 
-								adaptor.create_update_path("123-456", {
-									'name': 'my-nane',
-									'description': 'this is a test'
-								})
+                                adaptor.create_update_path("123-456", {
+                                    'name': 'my-nane',
+                                    'description': 'this is a test'
+                                })
 
-								mock_es.index.assert_called_with(
-									body={
-										'name': 'my-name',
-										'description': 'this is a test'
-									},
-									index='servicex_paths',
-									id='123-456',
-								)
+                                mock_es.index.assert_called_with(
+                                    body={
+                                        'name': 'my-name',
+                                        'description': 'this is a test'
+                                    },
+                                    index='servicex_paths',
+                                    id='123-456',
+                                )
 						</code></pre>
 						</div>
 					</section>
@@ -492,25 +490,25 @@
 						<h2>Example</h2>
 						<br/>
 						<pre><code data-trim class="fragment python">
-							# content of test_sample.py
-							def inc(x):
-								if x < 0:
-									return x - 1
-								return x + 1
+                            # content of test_sample.py
+                            def inc(x):
+                                if x < 0:
+                                    return x - 1
+                                return x + 1
 
-							def test_answer():
-								assert inc(3) == 4
+                            def test_answer():
+                                assert inc(3) == 4
 						</code></pre>
 
 						<pre><code data-trim class="fragment bash">
-							$ pytest -vv test_sample.py --cov=./
+                            $ pytest -vv test_sample.py --cov=./
 
-							main.py::test_answer PASSED
+                            main.py::test_answer PASSED
 
-							---------- coverage: platform darwin, python 3.5.4-final-0 -----------
-							Name      Stmts   Miss  Cover
-							-----------------------------
-							main.py       6      1    83%
+                            ---------- coverage: platform darwin, python 3.5.4-final-0 -----------
+                            Name      Stmts   Miss  Cover
+                            -----------------------------
+                            main.py       6      1    83%
 						</code></pre>
 					</section>
 
@@ -522,29 +520,29 @@
 
 					<section>
 						<pre><code data-trim class="fragment python">
-							# content of test_sample.py
-							def inc(x):
-								if x < 0:
-									return x - 1
-								return x + 1
+                            # content of test_sample.py
+                            def inc(x):
+                                if x < 0:
+                                    return x - 1
+                                return x + 1
 
-							def test_answer():
-								assert inc(3) == 4
+                            def test_answer():
+                                assert inc(3) == 4
 
-							def test_answer_negative():
-								assert inc(-2) == -3
+                            def test_answer_negative():
+                                assert inc(-2) == -3
 						</code></pre>
 
 						<pre><code data-trim class="fragment bash">
-							$ pytest -vv test_sample.py --cov=./
+                            $ pytest -vv test_sample.py --cov=./
 
-							main.py::test_answer PASSED
-							main.py::test_answer_negative PASSED
+                            main.py::test_answer PASSED
+                            main.py::test_answer_negative PASSED
 
-							---------- coverage: platform darwin, python 3.5.4-final-0 -----------
-							Name      Stmts   Miss  Cover
-							-----------------------------
-							main.py       8      0   100%
+                            ---------- coverage: platform darwin, python 3.5.4-final-0 -----------
+                            Name      Stmts   Miss  Cover
+                            -----------------------------
+                            main.py       8      0   100%
 						</code></pre>
 					</section>
 
@@ -654,9 +652,9 @@
                             install:
                                 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
                                     wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-                                  elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+                                    elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
                                     wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
-                                  fi
+                                    fi
                                 - bash miniconda.sh -b -p $HOME/miniconda
                                 - rm miniconda.sh
                                 - source $HOME/miniconda/etc/profile.d/conda.sh && conda activate
@@ -680,11 +678,11 @@
                             - defaults
                             - conda-forge
                             dependencies:
-                              - python=3.5
-                              - numpy>=1.12.0
-                              - pytest>=3.2.0
-                              - pytest-cov
-                              - pint>=0.7.2
+                                - python=3.5
+                                - numpy>=1.12.0
+                                - pytest>=3.2.0
+                                - pytest-cov
+                                - pint>=0.7.2
                         </code></pre>
                     </section>
 
