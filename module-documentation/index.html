@@ -1,0 +1,471 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>Documentation</title>
+
+        <link rel="stylesheet" href="css/reset.css">
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/white.css">
+
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="lib/css/monokai.css">
+
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                
+                <section data-markdown>
+                    <textarea data-template>
+                        # Documentation
+                    </textarea>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Documentation</h2>
+                        <br/>
+
+                        <p class="fragment">Professor Carole Goble in <a href="https://doi.org/10.1109/MIC.2014.88">&ldquo;Better Software, Better Research&rdquo;</a>:</p>
+                        <blockquote class="fragment" cite="https://doi.org/10.1109/MIC.2014.88">
+                            <small>
+                            One of my favorite #overlyhonestmethods tweets (a hashtag for lab scientists) is <a href="https://twitter.com/ianholmes/status/288689712636493824">
+                            Ian Holmes’s &ldquo;You can download our code from the URL supplied. Good luck downloading the only postdoc who can get it to run, though.</a>&rdquo;
+                            </small>
+                        </blockquote>
+                    </section>
+
+                    <section>
+                        <h2>Value of documentation</h2>
+                        <br/>
+
+                        <ul>
+                            <li class="fragment">The value and extent of your work is clearer if it can be understood by colleagues.</li>
+                            <li class="fragment">Documentation provides provenance for your scientific process, for your colleagues and yourself.</li>
+                            <li class="fragment">Documentation demonstrates your skill and professionalism.</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Documentation is easier than you think.</h2>
+                        <br/>
+
+                        <ul>
+                            <li class="fragment">Documentation pays for itself with the time it saves in the long run.</li>
+                            <li class="fragment">Documentation requires little effort beyond writing the software itself.</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>Types of documentation</h2>
+                        <br/>
+
+                        <ul>
+                            <li>Theory manuals</li>
+                            <li>User and developer guides</li>
+                            <li>Code comments</li>
+                            <li>Self-documenting code</li>
+                            <li>Generated API documentation</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2>User and developer guides</h2>
+                        <br/>
+
+                        <p class="fragment"><code>README</code>: sits in top-level directory and
+                            contains all the necessary information for installing, getting started with, and understanding the accompanying code.
+                        </p>
+
+                        <p class="fragment">May be accompanied by other specific files:
+                            <code>LICENSE</code>, <code>INSTALL</code>, <code>CITATION</code>, <code>ABOUT</code>, <code>CHANGELOG</code>
+                        </p>
+                    </section>
+
+                    <section>
+                        <h3>README example</h3>
+                        <br/>
+
+                        <div style="font-size:30px">
+                        <pre><code data-trim class="text">
+                            SQUIRREL, version 1.2 released on 2026-09-20
+
+                            # About
+
+                            The Spectral Q and U Imaging Radiation Replicating Experimental Library
+                            (SQUIRREL) is a library for replicating radiation sources with spectral details
+                            and Q and U polarizations of superman bubblegum.
+
+                            # Installation
+
+                            The SQUIRREL library relies on other libraries:
+
+                            - The ACORN library www.acorn.nutz
+                            - The TREEBRANCH database format API
+
+                            Install those before installing the SQUIRREL library. To install the SQUIRREL
+                            library:
+
+                            ./configure
+                            make --prefix=/install/path
+                            make install
+                            ...
+                        </code></pre>
+                        </div>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Comments</h3>
+                        <br/>
+
+                        <p class="fragment">Comments provide a way to insert metainformation about code intended for people, right next to the code:</p>
+
+                        <pre><code data-trim class="python fragment">
+                            def the_function(var):
+                                """This is a docstring, where a function 
+                                definition might live"""
+                                a = 1 + var # this is a simple comment
+                                return a
+                        </code></pre>
+
+                    </section>
+
+                    <section>
+                        <h3>Bad Comments</h3>
+                        <br/>
+
+                        <p class="fragment">Also possible to pollute code with unnecessary cruft:</p>
+
+                        <pre><code data-trim class="python fragment">
+                            def decay(index, database):
+                                # first, retrieve the decay constants from the database
+                                mylist = database.decay_constants()
+                                # next, try to access an element of the list
+                                try:
+                                    # gets decay constant at index in the list
+                                    d = mylist[index]
+                                # if the index doesn't exist
+                                except IndexError:
+                                    # throw an informative error message
+                                    raise Exception("value not found in the list")
+                                return d
+                        </code></pre>
+
+                    </section>
+
+                    <section>
+                        <h3>Useful Comments</h3>
+
+                        <p class="fragment">Code written cleanly will have its own voice. Use intelligent naming
+                            to make most lines of code clear without comments, then use comments sparingly to
+                            help explain reasons or complicated sections:
+                        </p>
+
+                        <pre><code data-trim class="python fragment">
+                            def decay(index, database):
+                                lambdas = database.decay_constants()
+                                try:
+                                    # gets decay constant at index in the list
+                                    lambda_i = lambdas[index]
+                                except IndexError:
+                                    raise Exception("value not found in the list")
+                                return lambda
+                        </code></pre>
+
+                    </section>
+                
+                </section>
+                <section>
+
+                    <section>
+                        <h3>Self-Documenting Code</h3>
+                        <br/>
+
+                        <p class="fragment"><strong>Naming:</strong> a class, variable, or function name should tell you why it exists,
+                            what it does, and how it is used.
+                        </p>
+
+                        <p class="fragment"><strong>Simple functions:</strong> functions should be small to be understandable and testable;
+                            they should only do <em>one thing</em>.
+                        </p>
+
+                        <p class="fragment"><strong>Consistent style:</strong> use a consistent, standardized style; e.g., select
+                            variable and function names according to the <a href="https://www.python.org/dev/peps/pep-0008/">
+                                PEP8 style guide</a> for Python.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h4>Guidelines for naming:</h4>
+
+                        <pre class="stretch"><code data-trim class="python">
+                            ## packages and modules are short and lowercase
+                            packages
+                            modules
+
+                            ## other objects can be long
+                            ClassesUseCamelCase
+                            ExceptionsAreClassesToo
+                            functions_use_snake_case
+                            CONSTANTS_USE_ALL_CAPS
+
+                            ## variable scope is *suggested* by style convention
+                            # internal to module
+                            _single_leading_underscore_
+                            # avoids conflicts with Python keywords
+                            single_trailing_underscore_
+                            # these are magic, like __init__
+                            __double_leading_and_trailing__
+                        </code></pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h3>Docstrings</h3>
+                        <br/>
+
+                        <p class="fragment"><strong>docstring:</strong> comment placed immediately after a function or class
+                            definition, typically enclosed by three pairs of double quotes:
+                        </p>
+                        <pre><code data-trim class="python fragment">
+                            def &lt;name&gt;(&lt;args&gt;):
+                                """&lt;docstring&gt;"""
+                                &lt;body&gt;
+                        </code></pre>
+
+                        <p class="fragment">docstrings are available within Python via <code>help()</code> and
+                            iPython's magic command <code>?</code>, and Sphinx picks them up.
+                        </p>
+
+                    </section>
+                    <section>
+                        <h3>Docstrings (more)</h3>
+                        <br/>
+
+                        <p class="fragment">Make docstrings descriptive and concise; you can explain the arguments
+                            of a function, its behavior, and how you intend it to be used.
+                        </p>
+
+                        <pre><code data-trim class="python fragment">
+                            def power(base, x):
+                                """Computes base^x. Both base and x should be integers,
+                                floats, or another numeric type.
+                                """
+                                return base**x
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Sphinx: automate generating documentation</h3>
+                        <br/>
+
+                        <p class="fragment">Sphinx can be used to automate the generation of HTML documentation;
+                            we can even use it with Travis CI to automatically build and deploy the docs
+                            on GitHub Pages.
+                        </p>
+
+                        <p class="fragment">For now, let's just make sure your docstrings are suitable for Sphinx.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h3>Numpy-Style Docstrings</h3>
+                        <br/>
+                        <div style="font-size:25px">
+                        <pre><code data-trim class="python">
+                            def function_with_types_in_docstring(param1, param2):
+                                """Example function with types documented in the docstring.
+
+                                `PEP 484`_ type annotations are supported. If attribute, parameter, and
+                                return types are annotated according to `PEP 484`_, they do not need to be
+                                included in the docstring:
+
+                                Parameters
+                                ----------
+                                param1 : int
+                                    The first parameter.
+                                param2 : str
+                                    The second parameter.
+
+                                Returns
+                                -------
+                                bool
+                                    True if successful, False otherwise.
+
+                                .. _PEP 484:
+                                    https://www.python.org/dev/peps/pep-0484/
+
+                                """
+                        </code></pre>
+                        </div>
+                        <p>More examples at the <a href="https://www.sphinx-doc.org/en/master/usage/extensions/example_numpy.html">
+                            Sphinx documentation</a>
+                        </p>
+                    </section>
+
+                    <section>
+                        <h3>Google-Style Docstrings</h3>
+                        <br/>
+                        <div style="font-size:25px">
+                        <pre><code data-trim class="python">
+                            def function_with_types_in_docstring(param1, param2):
+                                """Example function with types documented in the docstring.
+
+                                `PEP 484`_ type annotations are supported. If attribute, parameter, and
+                                return types are annotated according to `PEP 484`_, they do not need to be
+                                included in the docstring:
+
+                                Args:
+                                    param1 (int): The first parameter.
+                                    param2 (str): The second parameter.
+
+                                Returns:
+                                    bool: The return value. True for success, False otherwise.
+
+                                .. _PEP 484:
+                                    https://www.python.org/dev/peps/pep-0484/
+
+                                """
+                        </code></pre>
+                        </div>
+                        <p>More examples at the <a href="https://www.sphinx-doc.org/en/master/usage/extensions/example_google.html#example-google">
+                            Sphinx documentation</a>
+                        </p>
+                    </section>
+
+                </section>
+                
+                <section>
+                    
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## (Quickly) Building a documentation website with Sphinx
+                
+                            ### Also: using doctr to autodeploy docs with Travis!
+                        </textarea>
+                    </section>
+                
+                    <section data-markdown>
+                        <textarea data-template>
+                            ### [Sphinx quickstart](https://www.sphinx-doc.org/en/master/usage/quickstart.html)
+              
+                            - Install sphinx: `conda install sphinx`
+                            - `mkdir docs`
+                            - `cd docs`
+                            - `sphinx-quickstart`
+                            - Answer questions; accept most defaults. Say yes to `autodoc` extension
+                        </textarea>
+                    </section>
+              
+                    <section data-markdown>
+                        <textarea data-template>
+                            ### Add content
+              
+                            - In the `docs` directory, add an `installation.rst` file (for example)
+                            - Try building with `make html`
+                            - Did sphinx find and automatically build docs for your modules? Look for `.rst` files for each module.
+                        </textarea>
+                    </section>
+              
+                    <section data-markdown>
+                        <textarea data-template>
+                        Other useful things for `conf.py`:
+              
+                        - In extensions, add `sphinx.ext.napoleon` (for Google/NumPy-style docstring reading) and `sphinx.ext.mathjax` (if you want LaTeX-based equations), and `sphinx.ext.intersphinx` for connections to other docs
+                        - Set `napoleon_numpy_docstring` and `napoleon_google_docstring` to `True`/`False` depending on your docstring style.
+                        - Add an `intersphinx_mapping` dict to connect to other docs
+              
+                        </textarea>
+                    </section>
+              
+                    <section data-markdown>
+                        <textarea data-template>
+                        ### `intersphinx_mapping`
+              
+                        <pre><code data-trim class="python">
+                            intersphinx_mapping = {
+                                'python': ('https://docs.python.org/3.6', None),
+                                'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
+                                'numpy': ('https://docs.scipy.org/doc/numpy/', None),
+                            }
+                        </code></pre>
+                        </textarea>
+                    </section>
+              
+                    <section data-markdown>
+                        <textarea data-template>
+                        ### Sphinx with Markdown
+              
+                        Generally Sphinx uses ReStructuredText (`.rst`) files for documentation.
+                        But, you can also have it read Markdown files with the `recommonmark` extension:
+              
+                        - `conda install recommonmark`
+                        - Add `'recommonmark'` to the `extensions` list in `conf.py`
+                        - Extend the `source_suffix` dict:
+              
+                        <pre><code data-trim class="python">
+                        source_suffix = {
+                            '.rst': 'restructuredtext',
+                            '.txt': 'markdown',
+                            '.md': 'markdown',
+                        }
+                        </code></pre>
+                        </textarea>
+                    </section>
+              
+                    <section data-markdown>
+                        <textarea data-template>
+                        ### Other Sphinx goodies:
+              
+                        - You can configure it to generate a LaTeX-based PDF (i.e., a single user manual)
+                        - You can have versioned documentation, and also simultaneously have "devel" docs for unreleased changes.
+                        </textarea>
+                    </section>
+                </section>
+              
+                <section data-markdown>
+                  <textarea data-template>
+                    ### Using [doctr](https://drdoctr.github.io)
+              
+                    Doctr helps autodeploy docs to GitHub Pages using Travis CI.
+              
+                    Steps:
+              
+                    - Install: `conda install -c conda-forge doctr`
+                    - `doctr configure`
+                    </textarea>
+                </section>
+
+            </div>
+        </div>
+
+        <script src="js/reveal.js"></script>
+
+        <script>
+            // More info about config & dependencies:
+            // - https://github.com/hakimel/reveal.js#configuration
+            // - https://github.com/hakimel/reveal.js#dependencies
+            Reveal.initialize({
+                dependencies: [
+                    { src: 'plugin/markdown/marked.js' },
+                    { src: 'plugin/markdown/markdown.js' },
+                    { src: 'plugin/notes/notes.js', async: true },
+                    { src: 'plugin/highlight/highlight.js', async: true }
+                ]
+            });
+        </script>
+    </body>
+</html>
