@@ -1,0 +1,379 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>Open Practices and Software Citation</title>
+
+        <link rel="stylesheet" href="css/reset.css">
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/white.css">
+
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="lib/css/monokai.css">
+
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                
+                <section data-markdown>
+                    <textarea data-template>
+                        # Open Practices and Software Citation
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ## Topics:
+
+                        - Licensing and copyright
+                        - Open science practices
+                        - software citation
+                    </textarea>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Software Licenses & Copyright</h3>
+                        <br/>
+                        <h2 class="fragment">Important: I AM NOT A LAWYER!</h2>
+
+                        <h4 class="fragment">AKA: IANAL</h4>
+                    </section>
+
+                    <section>
+                        <h3>Copyright</h3>
+                        <br/>
+                        <p class="fragment">Facts and ideas are <strong>not copyrightable</strong>.</p>
+                        <br/><br/>
+                        <p class="fragment"><em>Expressions</em> of ideas are copyrightable.</p>
+                    </section>
+
+                    <section>
+                        <h3>Copyright Examples</h3>
+                        <br/>
+                        <p class="fragment">Game rules are not copyrightable (chess, Go, football, <em>Dungeons & Dragons</em>).</p>
+                        <p class="fragment">Expressions of game rules <em>are</em> copyrightable.</p>
+                        <img class="fragment" src="./images/dnd-handbook.jpg" height="300" alt="Dungeons & Dragons Player's Handbook">
+                    </section>
+
+                    <section>
+                        <h3>Copyright Examples 2</h3>
+                        <br/>
+                        <p class="fragment">A function that computes standard deviation of values: name choices and concept of the function are not copyrightable.</p>
+                        <br/>
+                        <p class="fragment">The <code>std()</code> code actually computes the standard deviation <em>is</em> copyrightable.</p>
+                    </section>
+
+                    <section>
+                        <h3>Basic Copyright</h3>
+                        <br/>
+                        <p class="fragment">"Right of First Publication": copyright automatically goes to the first creator of any creative work</p>
+
+                        <p class="fragment">(Even if not explicitly specified)</p>
+
+                        <p class="fragment">Consequence: if you post software to GitHub without an explicit license, then you own the copyright—even if openly and publicly visible.</p>
+
+                        <p class="fragment">By default, no one else is legally allowed to use or modify your work.</p>
+                    </section>
+
+                    <section>
+                        <h3>Software Licenses</h3>
+                        <br/>
+                        <p class="fragment"><strong>All</strong> software codes you make publicly available should be accompanied by a software license describing the terms by which others may use and/or modify your code.</p>
+                    </section>
+
+                    <section>
+                        <h3>Public Domain</h3>
+                        <br/>
+                        <p class="fragment">Alternatively, you can put work into the <em>public domain</em>: "This work has been placed in the public domain."</p>
+
+                        <p class="fragment">Free for anyone and everyone to use and modify.</p>
+
+                        <p class="fragment">Literature examples: Sherlock Holmes, Frankenstein</p>
+
+                        <p class="fragment">(There are some tricky issues internationally, however.)</p>
+                    </section>
+
+                    <section>
+                        <h3>Software Licenses</h3>
+                        <br/>
+                        <p class="fragment">Kinds of software licenses: proprietary, and free/open source (FOSS, FLOSS, OSS)</p>
+
+                        <p class="fragment"><strong>Pick an existing license. Do not create your own.</strong></p>
+                    </section>
+
+                    <section>
+                        <h3>Software Licenses</h3>
+                        <br/>
+                        <p class="fragment">FOSS categories: permissive, and "copyleft"</p>
+
+                        <p class="fragment"><strong>Permissive</strong> licenses: BSD 3-clause, MIT; allow further distribution under any license</p>
+
+                        <p class="fragment"><strong>Copyleft</strong> licenses: GPL; require modifications to be shared under the same license ("viral")
+                    </section>
+
+                    <section>
+                        <h3>https://choosealicense.com</h3>
+                        <a href="https://choosealicense.com" class="image"><img src="./images/choosealicense.com.png" height="500" alt="ChooseALicense.com"></a>
+                    </section>
+
+                    <section>
+                        <h3>Open Source Initiative licenses</h3>
+                        <a href="https://opensource.org/licenses" class="image"><img src="./images/open-source-initiative-licenses.png" height="500" alt="Open Source Initiative Licenses & Standards"></a>
+                    </section>
+
+                    <section>
+                        <h3>Which license to use?</h3>
+                        <br/>
+                        <p class="fragment">When in doubt, use a permissive license like the BSD 3-clause or MIT licenses.</p>
+                    </section>
+
+                    <section>
+                        <h3>Copyrighting other creative works: Creative Commons</h3>
+                        <br/>
+                        <ul class="fragment">
+                            <li>BY: Attribution</li>
+                            <li>SA: ShareAlike</li>
+                            <li>ND: NoDerivatives</li>
+                            <li>NC: NonCommercial</li>
+                        </ul>
+                        <p class="fragment">Licenses: CC BY, CC BY-SA, CC BY-NC, CC BY-NC-NC</p>
+                        <p class="fragment"><a href="https://creativecommons.org/share-your-work/">Choose a license</a>
+                    </section>
+
+                    <section>
+                        <h3>Beyond copyright & licenses</h3>
+
+                        <p class="fragment"><strong>Patents</strong>: cover ideas and concepts; modern issues with "patent trolls"</p>
+
+                        <p class="fragment"><strong>Trademarks</strong>: symbols that represent a business or organization</p>
+
+                        <p class="fragment"><strong>Export control</strong>: government may forbid the transfer of source code (and data, ideas) to another country or foreign national without permission</p>
+
+                        <p class="fragment"><strong>HIPAA compliance</strong>: software that deals with human patients must be anonymized</p>
+                    </section>
+
+                    <section>
+                        <h3>Long story short: pick a license when creating a project, and put as <code>LICENSE.txt</code> in your repo.</h3>
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        <p>We've talked about best practices:</p>
+                        <ul>
+                        <li class="fragment">
+                            Version control / collaboration
+                        </li>
+                        <li class="fragment">
+                            Licensing
+                        </li>
+                        <li class="fragment">
+                            Packaging / distribution
+                        </li>
+                        <li class="fragment">
+                            Documentation
+                        </li>
+                        </ul>
+                        <p class="fragment">Is that it?</p>
+                    </section>
+
+                    <section>
+                        <p>For research, need one more step: <strong>archiving</strong> software (or data)</p>
+                        
+                        <p class="fragment">Consider: what if you use/cite software, and someone modifies it?</p>
+                    </section>
+
+                    <section>
+                        <img class="plain" width="100%" data-src="./images/archiving.png">
+                    </section>
+                    <section>
+                        <p>Live demo time... connecting GitHub to Zenodo</p>
+                        <img class="plain" width="70%" data-src="./images/live-demo.jpeg">
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Citing software & data is important.</h3>
+                        
+                        <p class="fragment">
+                            Our research results depend on software and data—<strong>different versions of software and data change our answers</strong>.
+                        </p>
+                        <p class="fragment">
+                            Without proper citations, your work is <strong>not reproducible</strong>.
+                        </p>
+                        <p class="fragment">
+                            Also, academia relies on citations for <strong>credit</strong>. (for better or worse)
+                        </p>
+                    </section>
+                    <section>
+                        <h3>Software citation principles</h3>
+                        <img class="plain" width="60%" data-src="./images/software-citation-principles-paper.png">
+                        <small>
+                            Smith AM, Katz DS, Niemeyer KE, FORCE11 Software Citation Working Group. (2016) 
+                            Software citation principles. PeerJ Computer Science 2:e86 
+                            <a href="https://doi.org/10.7717/peerj-cs.86">https://doi.org/10.7717/peerj-cs.86</a>
+                        </small>
+                    </section>
+                    <section>
+                        <img class="plain" width="100%" data-src="./images/software-citation-principles.png">
+                    </section>
+                    <section>
+                        <h3>How to cite?</h3>
+                        <p class="fragment">Name/description</p>
+                        <p class="fragment">Author(s)/developer(s)</pclass="fragment">
+                        <p class="fragment fade-in-then-semi-out">DOI or other persistent identifier</p>
+                        <p class="fragment fade-in">Version number/commit hash</p>
+                        <p class="fragment">Location (e.g., GitHub repo)</p>
+                        </br>
+                        <p class="fragment"><em>(If there’s a paper describing it, cite that too)</em></p>
+                    </section>
+                    <section>
+                        <h3>Where to cite?</h3>
+                        <p class="fragment">
+                            <strong>In the text</strong> with the references/bibliography.
+                        </p>
+                        <div class="fragment">
+                            <img class="plain" width="60%" data-src="./images/pyjac-paper-citations.png">
+                            <small>
+                                KE Niemeyer, NJ Curtis, & CJ Sung. “pyJac: analytical Jacobian generator for 
+                                chemical kinetics” (2017) Computer Physics Communications, 215:188–203. 
+                                <a href="https://doi.org/10.1016/j.cpc.2017.02.004">https://doi.org/10.1016/j.cpc.2017.02.004</a>
+                            </small>
+                        </div>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3>Reproducibility: Repro-packs</h3>
+                        <p>
+                            Lorena Barba describes “reproducibility packages” associated with papers, 
+                            with figures shared under CC-BY license:
+                        </p>
+                        <blockquote cite="http://blogs.nature.com/naturejobs/2017/04/17/techblog-my-digital-toolbox-lorena-barba/">
+                            <small>
+                            &ldquo;For every figure that presents some result, we bundle the files needed to reproduce it — 
+                            input or configuration files used to run the simulation(s) behind the result; code to process raw 
+                            data into derived data; and scripts to create output graphs — and deposit them together with the 
+                            figure into an open-data repository, such as Figshare. Figshare assigns the bundle a DOI, 
+                            which we then include in the figure caption so readers can easily find the data and 
+                            re-create the result.&rdquo;
+                            </small>
+                        </blockquote>
+                    </section>
+                    <section>
+                        <h3>My practice:</h3>
+                        <ol>
+                            <li>
+                                Produce a single repro-pack for an entire paper, which contains:
+                                <ul>
+                                    <li class="fragment">Python plotting scripts and associated results data</li>
+                                    <li class="fragment">Figures (PDFs for plots, always)</li>
+                                    <li class="fragment">Any other relevant data: input files, configuration files, etc.</li>
+                                </ul>
+                            </li>
+                            <li class="fragment">
+                                Upload to Figshare/Zenodo under CC-BY license
+                            </li>
+                            <li class="fragment">
+                                Cite using the resulting DOI in the associated paper(s)
+                            </li>
+                        </ol>
+                    </section>
+                    <section>
+                        <h2>Benefits</h2>
+                        <p class="fragment">Improving reproducibility and impact of your work</p>
+                        <p class="fragment">Reviewers will love you with this one great trick!</p>
+                        <p class="fragment">
+                            It also lets you reuse your figures without violating the journal copyright. 
+                            (Yes, when published, the journal owns the paper and everything in it that isn’t licensed from somewhere else.)
+                        </p>
+                    </section>
+                    <section>
+                        <h3>How to cite/mention</h3>
+                        <img class="plain" width="75%" data-src="./images/repropack-appendix.png">
+                        </br>
+                        <small>
+                            A.J. Fillo et al., A fast, low-memory, and stable algorithm for implementing multicomponent 
+                            transport in direct numerical simulations, <em>J. Comput. Phys.</em> (2020), 
+                            109185, doi: <a href="https://doi.org/10.1016/j.jcp.2019.109185">https://doi.org/10.1016/j.jcp.2019.109185</a>.
+                        </small>
+                    </section>
+                    <section>
+                        <img class="plain stretch" width="50%" data-src="./images/repropack.png">
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h3><a href="https://joss.theoj.org/">JOSS: Journal of Open Source Software</a></h3>
+                        <img class="plain" width="10%" data-src="./images/JOSS-logo.png">
+                        <p class="fragment">
+                            Developer-friendly journal for research software packages
+                        </pclass="fragment">
+                        <p class="fragment">
+                            Affiliate of Open Source Initiative
+                        </p>
+                        <p class="fragment">
+                            Open access & no fees
+                        </p>
+                    </section>
+                    <section>
+                        <blockquote cite="https://joss.theoj.org">
+                            &ldquo;If you've already licensed your code and have good documentation then 
+                            we expect that it should take less than an hour to prepare and submit your 
+                            paper to JOSS.&rdquo;
+                        </blockquote>
+                    </section>
+                    <section>
+                        <img class="plain" width="60%" data-src="./images/joss-flowchart.png">
+                    </section>
+                    <section>
+                        <p>JOSS paper submission</p>
+                        <a href="https://joss.theoj.org/papers/new">
+                            <img class="plain" width="75%" data-src="./images/joss-submission.png">
+                        </a>
+                    </section>
+                    <section>
+                        <p>JOSS reviews</p>
+                        <a href="https://github.com/openjournals/joss-reviews/issues">
+                            <img class="plain" width="75%" data-src="./images/joss-reviews.png">
+                        </a>
+                    </section>
+                    
+                </section>
+
+            </div>
+        </div>
+
+        <script src="js/reveal.js"></script>
+
+        <script>
+            // More info about config & dependencies:
+            // - https://github.com/hakimel/reveal.js#configuration
+            // - https://github.com/hakimel/reveal.js#dependencies
+            Reveal.initialize({
+                dependencies: [
+                    { src: 'plugin/markdown/marked.js' },
+                    { src: 'plugin/markdown/markdown.js' },
+                    { src: 'plugin/notes/notes.js', async: true },
+                    { src: 'plugin/highlight/highlight.js', async: true }
+                ]
+            });
+        </script>
+    </body>
+</html>
