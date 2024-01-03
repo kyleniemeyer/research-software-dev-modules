@@ -1,26 +1,20 @@
 <!doctype html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
         <title>Packaging Python programs</title>
 
-        <link rel="stylesheet" href="css/reset.css">
-        <link rel="stylesheet" href="css/reveal.css">
-        <link rel="stylesheet" href="css/theme/white.css">
+        <link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+        <link rel="stylesheet" href="dist/theme/white.css">
 
         <!-- Theme used for syntax highlighting of code -->
-        <link rel="stylesheet" href="lib/css/monokai.css">
+        <link rel="stylesheet" href="plugin/highlight/monokai.css">
 
         <!-- Printing and PDF exports -->
-        <script>
-            var link = document.createElement( 'link' );
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-            document.getElementsByTagName( 'head' )[0].appendChild( link );
-        </script>
+        
     </head>
     <body>
         <div class="reveal">
@@ -32,13 +26,123 @@
                 </section>
 
                 <section>
-                    <h2>(Python) packaging</h1>
-                    <br/>
-                    <p><strong>module:</strong> Python file (<code>.py</code>) that contains definitions and statements.</p>
-                    <p><strong>package:</strong> a collection of modules in the same directory</p>
-                    <br/>
-                    <p class="fragment">Package directory must contain <code>__init__.py</code> for Python to "see" it*</p>
-                    <p class="fragment">* ... Not true with <a href="https://www.python.org/dev/peps/pep-0420/">namespace packages</a></p>
+                    <section>
+                        <h2>(Python) packaging</h1>
+                        <br/>
+                        <p><strong>module:</strong> Python file (<code>.py</code>) that contains definitions and statements.</p>
+                        <p><strong>package:</strong> a collection of modules in the same directory</p>
+                        <br/>
+                        <p class="fragment">Package directory must contain <code>__init__.py</code> for Python to "see" it*</p>
+                        <p class="fragment">* ... Not true with <a href="https://www.python.org/dev/peps/pep-0420/">namespace packages</a></p>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Python to package
+
+                            Most research software starts out as functions and scripts, hacked in a Jupyter notebook
+                            or Python shell.
+
+                            But, at some point, you might have a complicated workflow or set of operations you want to repeat, make reproducible,
+                            and/or make available to others. 
+
+                            At this point it probably makes sense to package your functions into modules and ultimately an installable software package.
+                        </textarea>
+                    </section>
+                    <section>
+                        <h3><code>rescale</code> function from Software Carpentry:</h3>
+                        <div style="font-size:36px">
+                        <pre class="stretch"><code data-trim class="python">
+                            import numpy as np
+
+                            def rescale(input_array):
+                                """Rescales an array from 0 to 1.
+
+                                Takes an array as input, and returns a corresponding array scaled 
+                                so that 0 corresponds to the minimum and 1 to the maximum value 
+                                of the input array.
+                                """
+                                L = np.min(input_array)
+                                H = np.max(input_array)
+                                output_array = (input_array - L) / (H - L)
+                                return output_array
+                        </code></pre>
+                        <div class="fragment">
+                        <p>Call it:</p>
+                        <pre class="stretch"><code data-trim class="python">
+                            rescale(np.linspace(0, 100, 5))
+                        </code></pre>
+                        </div>
+                        <div class="fragment">
+                        <pre class="stretch"><code data-trim>
+                            array([ 0.  ,  0.25,  0.5 ,  0.75,  1.  ])
+                        </code></pre>
+                        </div>
+                        </div>
+                    </section>
+                    <section>
+                        <h3>Package in six lines:</h3>
+                        <ul>
+                            <li class="fragment"><code>mkdir package</code></li>
+                            <li class="fragment"><code>cd package</code></li>
+                            <li class="fragment"><code>git init</code></li>
+                            <li class="fragment"><code>mkdir -p src/rescale tests docs</code></li>
+                            <li class="fragment"><code>touch src/rescale/__init__.py src/rescale/rescale.py</code></li>
+                            <li class="fragment"><code>touch pyproject.toml</code></li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Contents of <code>pyproject.toml</code></h3>
+                        <br/>
+                        <pre><code data-trim class="toml">
+                            # contents of pyproject.toml
+                            [build-system]
+                            requires = ["hatchling"]
+                            build-backend = "hatchling.build"
+                            
+                            [project]
+                            name = "package"
+                            version = "0.1.0"
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>Package file structure:</h3>
+                        <br/>
+                        <pre><code data-trim class="bash">
+                            .
+                            ├── docs/
+                            ├── pyproject.toml
+                            ├── src/
+                            │   └── package/
+                            │   │   ├── __init__.py
+                            │   │   └── rescale.py
+                            └── tests/
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>Install and import package</h3>
+                        <br/>
+                        <div class="fragment">
+                        <p>Install in editable mode:</p>
+                        <pre><code data-trim class="bash">
+                            $ pip install -e .
+                        </code></pre>
+                        </div>
+                        <div class="fragment">
+                        <p>Import and call:</p>
+                        <pre><code data-trim class="python">
+                            import numpy as np
+                            from package.rescale import rescale
+
+                            rescale(np.linspace(0, 100, 5))
+                        </code></pre>
+                        </div>
+                        <div class="fragment">
+                        <p>Output:</p>
+                        <pre><code data-trim>
+                            array([0.  , 0.25, 0.5 , 0.75, 1.  ])
+                        </code></pre>
+                        </div>
+                    </section>
                 </section>
 
                 <section>
@@ -46,20 +150,22 @@
                         <h3><code>compphys</code> package structure:</h3>
                         <br/>
                         <pre><code data-trim>
-                            compphys/
-                            |-- __init__.py
-                            |-- constants.py
-                            |-- physics.py
-                            |-- more/
+                            src/
+                            |-- compphys/
                             |   |-- __init__.py
-                            |   |-- morephysics.py
-                            |   |-- evenmorephysics.py
+                            |   |-- constants.py
+                            |   |-- physics.py
+                            |   |-- more/
+                            |   |   |-- __init__.py
+                            |   |   |-- morephysics.py
+                            |   |   |-- evenmorephysics.py
                             |-- assets/
                             |   |-- data.txt
                             |   |-- orphan.py
-                            |-- tests/
-                            |   |-- test_physics.py
-                            |   |-- test_morephysics.py
+                            tests/
+                            |-- test_physics.py
+                            |-- test_morephysics.py
+                            docs/
                             ...
                         </code></pre>
                     </section>
@@ -75,7 +181,7 @@
                             </li>
                             <li class="fragment"><code>more</code> is a submodule
                             </li>
-                            <li class="fragment"><code>raw</code> is a subdirectory;
+                            <li class="fragment"><code>assets</code> is a subdirectory;
                                 not a submodule since it doesn't have <code>__init__.py</code> (<code>orphan.py</code> is unreachable!)
                             </li>
                             <li class="fragment"><code>tests</code>: subdirectory with tests
@@ -208,185 +314,133 @@
                             </li>
                         </ul>
                     </section>
-
+                </section>
+                <section>
                     <section>
-                        <div style="font-size:35px">
-                        <pre class="stretch"><code data-trim class="text">
-                        setup.py
-                        compphys/
-                        |--  __init__.py
-                        |-- _version.py
-                        |-- constants.py
-                        |-- physics.py
-                        |-- more/
-                        |   |-- __init__.py
-                        |   |-- morephysics.py
-                        |   |-- evenmorephysics.py
-                        |-- assets/
-                        |   |-- data.txt
-                        |   |-- orphan.py
-                        |-- tests/
-                        |   |-- test_physics.py
-                        |   |-- test_morephysics.py
-                        LICENSE
-                        README.md
-                        CHANGELOG.md
-                        CONTRIBUTING.md 
-                        CODE_OF_CONDUCT.md
-                        </code></pre>
-                        </div>
-                    </section>
+                        <h3>Other files that belong with your package</h3>
 
-                    <section>
-                        <p>
-                            <code>setup.py</code> imports and calls <code>setup()</code> function, which can both install
-                            a package locally and make/upload to PyPI
-                        </p>
-                    </section>
-
-                    <section>
-                        <div style="font-size:25px">
-                        <pre><code data-trim class="python stretch">
-                            from setuptools import setup
-                            
-                            setup(
-                                name='compphys',
-                                version='0.1.0',
-                                description='Effective Computation in Physics',
-                                author='Anthony Scopatz and Kathryn D. Huff',
-                                author_email='koolkatz@gmail.com',
-                                url='http://physics.codes',
-                                classifiers=[
-                                    'License :: OSI Approved :: BSD License',
-                                    'Intended Audience :: Developers',
-                                    'Intended Audience :: Science/Research',
-                                    'Natural Language :: English',
-                                    'Programming Language :: Python :: 3',
-                                ],
-                                license='BSD-3-Clause',
-                                python_requires='>=3',
-                                zip_safe=False,
-                                packages=['compphys', 'compphys.more', 'compphys.tests'],
-                                # or find automatically:
-                                # packages=find_packages(),
-                                package_dir={
-                                    'compphys': 'compphys',
-                                    'compphys.more': 'compphys/more',
-                                    'compphys.tests': 'compphys/tests',
-                                    },
-                                #
-                                include_package_data=True,
-                                # or you can specify explicitly:
-                                package_data={
-                                    'compphys': ['assets/*.txt']
-                                    },
-                                )
-                        </code></pre>
-                        </div>
-                    </section>
-
-                    <section>
-                        <h3>Better:</h3>
                         <ul>
-                            <li class="fragment">
-                                Have <code>setup.py</code> copy in README, version information from
-                                <code>_version.py</code> file in your package, and include dependency information.
-                            </li>
-                            <li class="fragment">
-                                Add a <code>setup.cfg</code> file with some additional configuration options
-                            </li>
-                            <li class="fragment">
-                                Add a <a href="https://keepachangelog.com/"<code>CHANGELOG</code> file</a> to describe how your
-                                code changes with each version.
-                            </li>
-                            <li class="fragment">
-                                Add a <code>MANIFEST.in</code> file to tell PyPI to bring other files.
-                            </li>
+                            <li>Description and other information about package</li>
+                            <li>Terms and conditions under which software can be downloaded, used, and/or modified</li>
+                            <li>Keeping track of changes</li>
+                        </ul>
                     </section>
-
                     <section>
-                        <div style="font-size:25px">
-                        <pre><code data-trim class="python">
-                        from setuptools import setup
-                        from codecs import open
-                        from os import path
-                        import sys
-
-                        here = path.abspath(path.dirname(__file__))
+                        <h3>Create a README</h3>
+                    
+                        <pre><code data-trim class="bash">
+                            touch README.md
+                        </code></pre>
                         
-                        version = {}								
-                        with open(path.join(here, 'compphys', '_version.py')) as version_file:
-                            exec(version_file.read(), version)
-                        __version__ = version['__version__']
+                        <p class="fragment">A README is a form of software documentation, and should contain at minimum:</p>
+                        <ul>
+                            <li class="fragment">the name of your software package</li>
+                            <li class="fragment">a brief description of what your software does or provides</li>
+                            <li class="fragment">installation instructions</li>
+                            <li class="fragment">a brief usage example</li>
+                            <li class="fragment">the type of software license (with more information in a separate LICENSE file, described next)</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <p>In addition, a README may also contain:</p>
+                        <ul>
+                            <li class="fragment">badges near the top that quickly show key information, such as the latest version, whether the tests are currently passing</li>
+                            <li class="fragment">information about how people can contribute to your package</li>
+                            <li class="fragment">a code of conduct for people interacting around your project (in GitHub Issues or Pull Requests, for example)</li>
+                            <li class="fragment">contact information for authors and/or maintainers</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <div style="font-size:32px">
+                        <pre class="stretch"><code data-trim class="markdown">
+                        # Package
 
-                        with open(path.join(here, 'README.md')) as readme_file:
-                            readme = readme_file.read()
+                        `package` is a simple Python library that contains a single function 
+                        for rescaling arrays.
 
-                        with open(path.join(here, 'CHANGELOG.md')) as changelog_file:
-                            changelog = changelog_file.read()
-                        
-                        long_description = readme + '\n\n' + changelog
+                        ## Installation
 
-                        install_requires = [
-                            'numpy',
-                        ]
+                        Download the source code and use the package manager 
+                        [pip](https://pip.pypa.io/en/stable/) to install `package`:
 
-                        tests_require = [
-                            'pytest',
-                            'pytest-cov',
-                        ]
+                        ```bash
+                        pip install .
+                        ```
 
-                        needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
-                        setup_requires = ['pytest-runner'] if needs_pytest else []
+                        ## Usage
 
-                        setup(
-                            name='compphys',
-                            version=__version__,
-                            description='Effective Computation in Physics',
-                            long_description=long_description,
-                            author='Anthony Scopatz and Kathryn D. Huff',
-                            author_email='koolkatz@gmail.com',
-                            url='http://physics.codes',
-                            classifiers=[
-                                'License :: OSI Approved :: BSD License',
-                                'Intended Audience :: Developers',
-                                'Intended Audience :: Science/Research',
-                                'Natural Language :: English',
-                                'Programming Language :: Python :: 3',
-                            ],
-                            license='BSD-3-Clause',
-                            install_requires=install_requires,
-                            tests_require=tests_require,
-                            python_requires='>=3',
-                            setup_requires=setup_requires,
-                            zip_safe=False,
-                            packages=['compphys', 'compphys.more', 'compphys.tests'],
-                            package_dir={
-                                'compphys': 'compphys',
-                                'compphys.more': 'compphys/more',
-                                'compphys.tests': 'compphys/tests',
-                                },
-                            include_package_data=True,
-                        )
+                        ```python
+                        import numpy as np
+                        from package.rescale import rescale
+
+                        # rescales over 0 to 1
+                        rescale(np.linspace(0, 100, 5))
+                        ```
+
+                        ## Contributing
+                        Pull requests are welcome. For major changes, please open an issue 
+                        first to discuss what you would like to change.
+
+                        Please make sure to update tests as appropriate.
+
+                        ## License
+                        TBD
                         </code></pre>
                         </div>
                     </section>
-
                     <section>
-                        <h3>Contents of <code>_version.py</code>:</h3>
-                        <br>
-                        <pre><code data-trim class="python">
-                        __version_info__ = (0, 1, 0, 'a0')
-                        __version__ = '.'.join(map(str, __version_info__[:3]))
-                        if len(__version_info__) == 4:
-                            __version__ += __version_info__[-1]
+                        <h3>Choose a software license</h3>
+                        <br/>
+                        <p class="fragment">More on this later... for now:</p>
+                        <pre class="fragment"><code data-trim class="bash">
+                            touch LICENSE
                         </code></pre>
+                        <p class="fragment">Copy-paste the BSD 3-clause license:</p>
                     </section>
-
                     <section>
-                        <h3>Contents of <code>CHANGELOG.md</code>:</h3>
-                        <br>
-                        <div style="font-size:20px">
+                        <div style="font-size:30px">
+                            <pre class="stretch"><code data-trim class="text">
+                            BSD 3-Clause License
+
+                            Copyright (c) [year], [fullname]
+
+                            Redistribution and use in source and binary forms, with or without
+                            modification, are permitted provided that the following conditions are met:
+
+                            1. Redistributions of source code must retain the above copyright notice, this
+                            list of conditions and the following disclaimer.
+
+                            2. Redistributions in binary form must reproduce the above copyright notice,
+                            this list of conditions and the following disclaimer in the documentation
+                            and/or other materials provided with the distribution.
+
+                            3. Neither the name of the copyright holder nor the names of its
+                            contributors may be used to endorse or promote products derived from
+                            this software without specific prior written permission.
+
+                            THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+                            AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+                            IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+                            DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+                            FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+                            DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+                            SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+                            CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+                            OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+                            OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+                            </code></pre>
+                        </div>
+                    </section>
+                    <section>
+                        <h3>Keep a CHANGELOG</h3>
+                        <br/>
+                        <p class="fragment">Over time, your package will change as you fix bugs, add features, and make improvements.</p>
+                        <p class="fragment">Technically, your Git history should contain all the records of changes, but in practice this isn't very helpful for functionality changes.</p>
+                        <p class="fragment">Instead, <href="https://keepachangelog.com/">keep a CHANGELOG</href> that is a human-readable record of major changes between each version.</p>
+                    </section>
+                    <section>
+                        <h3>Contents of <code>CHANGELOG.md</code></h3>
+                        <div style="font-size:24px">
                         <pre><code data-trim class="markdown">
                         # Changelog
                         All notable changes to this project will be documented in this file.
@@ -480,52 +534,199 @@
                         </div>
                     </section>
 
-
                     <section>
-                        <ol>
-                        <li class="fragment">
-                            Install the package from source: <code>python setup.py install</code>
-                        </li>
-                        <li class="fragment">
-                            Or, install using pip: <code>pip install &lt;path&gt;</code>
-                        </li>
-                        <li class="fragment">
-                            Can also install in development mode: <code>pip install -e &lt;path&gt;</code>
-                        </li>
-                        <ol>
-                    </section>
-                    <section>
-                        <p>
-                            <a href="https://semver.org">Semantic Versioning</a>: Given a version number MAJOR.MINOR.PATCH, increment the:
-                        </p>
-                        <ul class="fragment">
-                            <li>MAJOR version when you make incompatible API changes,</li>
-                            <li>MINOR version when you add functionality in a backwards-compatible manner, and</li>
-                            <li>PATCH version when you make backwards-compatible bug fixes.</li>
-                        </ul>
-                        <p class="fragment">
-                            To start: set initial development release at 0.1.0 and increment minor version for subsequent releases.
-                        </p>
+                        <div style="font-size:35px">
+                        <pre class="stretch"><code data-trim class="text">
+                        pyproject.toml
+                        src/
+                        |-- compphys/
+                        |   |--  __init__.py
+                        |   |-- _version.py
+                        |   |-- constants.py
+                        |   |-- physics.py
+                        |   |-- more/
+                        |   |   |-- __init__.py
+                        |   |   |-- morephysics.py
+                        |   |   |-- evenmorephysics.py
+                        assets/
+                        |-- data.txt
+                        |-- orphan.py
+                        tests/
+                        |-- test_physics.py
+                        |-- test_morephysics.py
+                        docs/
+                        LICENSE
+                        README.md
+                        CHANGELOG.md
+                        CONTRIBUTING.md 
+                        CODE_OF_CONDUCT.md
+                        </code></pre>
+                        </div>
                     </section>
                 </section>
 
+                <section>
+
+                    <section>
+                        <h2>Metadata: other information contained in <code>pyproject.toml</code></h2>
+                    </section>
+
+                    <section>
+                        <h3>Name</h3>
+                        <br/>
+                        <pre class="fragment" class="stretch"><code data-trim class="toml">
+                            name = "some_project"
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>Version</h3>
+                        <br/>
+                        <pre class="fragment" class="stretch"><code data-trim class="toml">
+                            version = "1.2.3"
+                            version = "0.2.1b1"
+                        </code></pre>
+                        <br/>
+                        <p class="fragment">Can also have specified elsewhere with <code>dynamic = ["version"]</code></p>
+                    </section>
+                    <section>
+                        <h3>Description</h3>
+                        <div style="font-size:30px">
+                        <pre class="fragment" class="stretch"><code data-trim class="toml">
+                            description = "This is a very short summary of a very cool project."
+                        </code></pre>
+                        </div>
+                        <br/>
+                        <h3 class="fragment">Readme</h3>
+                        <pre class="fragment" class="stretch"><code data-trim class="toml">
+                            readme = "README.md"
+                        </code></pre>
+                        <br/>
+                        <h3 class="fragment">Keywords</h3>
+                        <pre class="fragment" class="stretch"><code data-trim class="toml">
+                            keywords = ["example", "tutorial"]
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>Authors and maintainers</h3>
+                        <br/>
+                        <pre class="fragment" class="stretch"><code data-trim class="toml">
+                            authors = [
+                                {name="Me Myself", email="email@mail.com"},
+                                {name="You Yourself", email="email2@mail.com"},
+                            ]
+                            maintainers = [
+                                {name="It Itself", email="email3@mail.com"},
+                            ]
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>URLs</h3>
+                        <br/>
+                        <pre class="fragment" class="stretch"><code data-trim class="toml">
+                            # Inline form
+                            urls.Homepage = "https://pypi.org"
+                            urls."Source Code" = "https://pypi.org"
+
+                            # Sectional form
+                            [project.urls]
+                            Homepage = "https://pypi.org"
+                            "Source Code" = "https://pypi.org"
+                        </code></pre>
+                        <p class="fragment">Others: Documentation, Bug Tracker, Changelog, Discussions, and Chat</p>
+                    </section>
+                    <section>
+                        <h3>Classifiers</h3>
+                        <br/>
+                        <div style="font-size:30px">
+                        <pre class="fragment" class="stretch"><code data-trim class="toml">
+                            classifiers = [
+                                "Development Status :: 5 - Production/Stable",
+                                "Intended Audience :: Developers",
+                                "Intended Audience :: Science/Research",
+                                "License :: OSI Approved :: BSD License",
+                                "Operating System :: OS Independent",
+                                "Programming Language :: Python",
+                                "Programming Language :: Python :: 3",
+                                "Programming Language :: Python :: 3 :: Only",
+                                "Programming Language :: Python :: 3.8",
+                                "Programming Language :: Python :: 3.9",
+                                "Programming Language :: Python :: 3.10",
+                                "Programming Language :: Python :: 3.11",
+                                "Topic :: Scientific/Engineering",
+                                "Topic :: Scientific/Engineering :: Information Analysis",
+                                "Topic :: Scientific/Engineering :: Mathematics",
+                                "Topic :: Scientific/Engineering :: Physics",
+                                "Typing :: Typed",
+                            ]
+                        </code></pre>
+                        </div>
+                    </section>
+                    <section>
+                        <h3>Functional metadata</h3>
+                        <br/>
+                        <pre class="fragment" class="stretch"><code data-trim class="toml">
+                            requires-python = ">=3.8"
+
+                            dependencies = [
+                                "numpy>=1.18",
+                            ]
+
+                            [project.optional-dependenices]
+                            test = ["pytest>=6"]
+                            check = ["flake8"]
+                            plot = ["matplotlib"]
+
+                            [project.scripts]
+                            project-cli = "project.__main__:main"
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3><code>pyproject.toml</code></h3>
+                        <div style="font-size:30px">
+                        <pre class="stretch"><code data-trim class="toml">
+                        [build-system]
+                        requires = ["hatchling"]
+                        build-backend = "hatchling.build"
+
+                        [project]
+                        name = "package"
+                        version = "0.0.1"
+                        authors = [
+                            { name="Example Author", email="author@example.com" },
+                        ]
+                        description = "A small example package"
+                        readme = "README.md"
+                        requires-python = ">=3.8"
+                        classifiers = [
+                            "Programming Language :: Python :: 3",
+                            "License :: OSI Approved :: MIT License",
+                            "Operating System :: OS Independent",
+                        ]
+
+                        [project.urls]
+                        "Homepage" = "https://github.com/pypa/sampleproject"
+                        "Bug Tracker" = "https://github.com/pypa/sampleproject/issues"
+                        </code></pre>
+                        </div>
+                    </section>
+                </section>
             </div>
         </div>
 
-        <script src="js/reveal.js"></script>
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
 
-        <script>
-            // More info about config & dependencies:
-            // - https://github.com/hakimel/reveal.js#configuration
-            // - https://github.com/hakimel/reveal.js#dependencies
-            Reveal.initialize({
-                dependencies: [
-                    { src: 'plugin/markdown/marked.js' },
-                    { src: 'plugin/markdown/markdown.js' },
-                    { src: 'plugin/notes/notes.js', async: true },
-                    { src: 'plugin/highlight/highlight.js', async: true }
-                ]
-            });
-        </script>
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
     </body>
 </html>
