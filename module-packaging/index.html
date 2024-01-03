@@ -27,6 +27,61 @@
 
                 <section>
                     <section>
+                        <h2>First: environments</h2>
+                    </section>
+                    <section>
+                        <h3>Installing packages</h3>
+                        <br/>
+                        <p class="fragment">You often see these instructions to install a package:</p>
+                        <pre class="fragment"><code data-trim class="bash">
+                            pip install [package]         # Use only in virtual environment!
+                            pip install --user [package]  # Almost never use
+                        </code></pre>
+                        <p class="fragment">🚨 Don't do this unless you know what you are doing!</p>
+                    </section>
+                    <section>
+                        <h3>Solution: virtual environments (libraries) and <code>pipx</code> (applications)</h3>
+                        <br/>
+                        <p class="fragment">(and use system package managers like <code>brew</code> when possible)</p>
+                    </section>
+                    <section>
+                        <h3>Virtual environments</h3>
+                        <br/>
+                        <p class="fragment">Use standard library <code>venv</code> module or <code>virtualenv</code> module:</p>
+                        <pre class="fragment"><code data-trim class="bash">
+                            python3 -m venv .venv
+                        </code></pre>
+                        <p class="fragment">Source with:</p>
+                        <pre class="fragment"><code data-trim class="bash">
+                            . .venv/bin/activate 
+                        </code></pre>
+                        <p class="fragment">Now <code>pip</code> install away!</p>
+                    </section>
+                    <section>
+                        <h3>What about conda?</h3>
+                        <br/>
+                        <pre class="fragment"><code data-trim class="bash">
+                            # turn off the default environment
+                            conda config --set auto_activate_base false  
+
+                            conda env create -n some_name  # or use paths with `-p`
+                            conda activate some_name
+                            conda deactivate
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>What about command line applications?</h3>
+                        <br/>
+                        <p class="fragment">Use <code>pipx</code>, which creates new virtual environment for package</p>
+                        <pre class="fragment"><code data-trim class="bash">
+                            pipx install [package]
+                            pipx inject ipython matplotlib
+                        </code></pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
                         <h2>(Python) packaging</h1>
                         <br/>
                         <p><strong>module:</strong> Python file (<code>.py</code>) that contains definitions and statements.</p>
@@ -279,40 +334,6 @@
                         </code></pre>
                         </div>
                         <p>Source: <a href="https://realpython.com/python-main-function/">https://realpython.com/python-main-function/</a></p>
-                    </section>
-                </section>
-                <section>
-                    <section>
-                        <h2>Package management options</h2>
-                        <br>
-                        <ul>
-                            <li class="fragment">
-                                Source-based: link to code. Good for dynamic languages, less for compiled.
-                            </li>
-                            <li class="fragment">
-                                Binary: popular for both dynamic and compiled. Create packages for various architectures/systems.
-                            </li>
-                            <li class="fragment">
-                                Virtualization: package both software and environment.
-                            </li>
-                        </ul>
-                    </section>
-                    
-                    <section>
-                        <h2> Python: <code>pip</code> and PyPI </h2>
-                        <br>
-                        <ul>
-                            <li class="fragment">
-                                <code>pip</code> can be used to install Python packages from source or from <a href="https://pypi.org">PyPI</a>
-                            </li>
-                            <li class="fragment">
-                                We will tell <code>pip</code> how to install your package by creating a <code>setup.py</code>
-                                file for the <code>setuptools</code> package to use.
-                            </li>
-                            <li class="fragment">
-                                <code>setup.py</code> goes at the same level as your package's source code directory.
-                            </li>
-                        </ul>
                     </section>
                 </section>
                 <section>
