@@ -1,26 +1,17 @@
 <!doctype html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
         <title>Documentation</title>
 
-        <link rel="stylesheet" href="css/reset.css">
-        <link rel="stylesheet" href="css/reveal.css">
-        <link rel="stylesheet" href="css/theme/white.css">
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+        <link rel="stylesheet" href="dist/theme/white.css">
 
         <!-- Theme used for syntax highlighting of code -->
-        <link rel="stylesheet" href="lib/css/monokai.css">
-
-        <!-- Printing and PDF exports -->
-        <script>
-            var link = document.createElement( 'link' );
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-            document.getElementsByTagName( 'head' )[0].appendChild( link );
-        </script>
+        <link rel="stylesheet" href="plugin/highlight/monokai.css">
     </head>
     <body>
         <div class="reveal">
@@ -353,20 +344,19 @@
                     <section data-markdown>
                         <textarea data-template>
                             ## (Quickly) Building a documentation website with Sphinx
-                
-                            ### Also: using doctr to autodeploy docs with Travis!
+
                         </textarea>
                     </section>
                 
                     <section data-markdown>
                         <textarea data-template>
                             ### [Sphinx quickstart](https://www.sphinx-doc.org/en/master/usage/quickstart.html)
-              
-                            - Install sphinx: `conda install sphinx`
-                            - `mkdir docs`
-                            - `cd docs`
-                            - `sphinx-quickstart`
-                            - Answer questions; accept most defaults. Say yes to `autodoc` extension
+                            
+                            - Create a virtual environment (if needed): `python3 -m venv .venv`
+                            - Activate: `source .venv/bin/activate`
+                            - Install sphinx: `pip install sphinx`
+                            - `sphinx-quickstart docs`
+                            - Answer questions; accept most defaults. Say yes to "Separate source and build directories"
                         </textarea>
                     </section>
               
@@ -374,7 +364,7 @@
                         <textarea data-template>
                             ### Add content
               
-                            - In the `docs` directory, add an `installation.rst` file (for example)
+                            - In the `docs\source` directory, modify `index.rst` and add an `installation.rst` file (for example)
                             - Try building with `make html`
                             - Did sphinx find and automatically build docs for your modules? Look for `.rst` files for each module.
                         </textarea>
@@ -410,19 +400,10 @@
                         ### Sphinx with Markdown
               
                         Generally Sphinx uses ReStructuredText (`.rst`) files for documentation.
-                        But, you can also have it read Markdown files with the `recommonmark` extension:
+                        But, you can also have it read Markdown files with the `myst_parser` extension:
               
-                        - `conda install recommonmark`
-                        - Add `'recommonmark'` to the `extensions` list in `conf.py`
-                        - Extend the `source_suffix` dict:
-              
-                        <pre><code data-trim class="python">
-                        source_suffix = {
-                            '.rst': 'restructuredtext',
-                            '.txt': 'markdown',
-                            '.md': 'markdown',
-                        }
-                        </code></pre>
+                        - `pip install myst_parser`
+                        - Add `'myst_parser'` to the `extensions` list in `conf.py`
                         </textarea>
                     </section>
               
@@ -434,38 +415,74 @@
                         - You can have versioned documentation, and also simultaneously have "devel" docs for unreleased changes.
                         </textarea>
                     </section>
-                </section>
-              
-                <section data-markdown>
-                  <textarea data-template>
-                    ### Using [doctr](https://drdoctr.github.io)
-              
-                    Doctr helps autodeploy docs to GitHub Pages using Travis CI.
-              
-                    Steps:
-              
-                    - Install: `conda install -c conda-forge doctr`
-                    - `doctr configure`
-                    </textarea>
-                </section>
 
+                    <section data-markdown>
+                        <textarea data-template>
+                          ### Using [GitHub Pages](https://pages.github.com/) and [Actions](https://docs.github.com/en/actions)
+                    
+                          Steps:
+                          - `mkdir -p .github/workflows`
+                          - `touch sphinx.yml`
+                          </textarea>
+                      </section>
+                      <section>
+                          <h3>Contents of <code>sphinx.yml</code>:</h3>
+                          <pre class="stretch" style="font-size:20px"><code data-trim class='yaml'>
+                              name: "Sphinx: Render docs"
+      
+                              on: push
+                              
+                              jobs:
+                                build:
+                                  runs-on: ubuntu-latest
+                                  permissions:
+                                    contents: write
+                                  steps:
+                                  - uses: actions/checkout@v4
+                                  - name: Build HTML
+                                    uses: ammaraskar/sphinx-action@master
+                                  - name: Upload artifacts
+                                    uses: actions/upload-artifact@v4
+                                    with:
+                                      name: html-docs
+                                      path: docs/build/html/
+                                  - name: Deploy
+                                    uses: peaceiris/actions-gh-pages@v3
+                                    if: github.ref == 'refs/heads/main'
+                                    with:
+                                      github_token: ${{ secrets.GITHUB_TOKEN }}
+                                      publish_dir: docs/build/html
+                          </code></pre>
+                      </section>
+                      <section data-markdown>
+                        <textarea data-template>
+                          ### Deploying
+                            
+                          1. `git add docs .github/workflows/sphinx.yml`
+                          2. `git commit -m 'adds sphinx action'`
+                          3. `git push`
+                          4. On GitHub -> Settings -> Pages -> Branch: `gh-pages` + `/(root)`, then Save
+                          5. Wait a few minutes, then see <https://[username].github.io/test-docs/>
+                          </textarea>
+                      </section>
+                </section>
             </div>
         </div>
 
-        <script src="js/reveal.js"></script>
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
 
-        <script>
-            // More info about config & dependencies:
-            // - https://github.com/hakimel/reveal.js#configuration
-            // - https://github.com/hakimel/reveal.js#dependencies
-            Reveal.initialize({
-                dependencies: [
-                    { src: 'plugin/markdown/marked.js' },
-                    { src: 'plugin/markdown/markdown.js' },
-                    { src: 'plugin/notes/notes.js', async: true },
-                    { src: 'plugin/highlight/highlight.js', async: true }
-                ]
-            });
-        </script>
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
     </body>
 </html>
