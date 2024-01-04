@@ -466,6 +466,53 @@
                           </textarea>
                       </section>
                 </section>
+                <section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Versioning
+
+                            Three commonly used schemes
+                            - [SemVer: Semantic Versioning](https://semver.org)
+                            - [ZeroVer](https://0ver.org)
+                            - [CalVer: Calendar based versioning](https://calver.org)
+                        </textarea>
+                    </section>
+                    <section>
+                        <p>
+                            <a href="https://semver.org">Semantic Versioning</a>: Given a version number MAJOR.MINOR.PATCH, increment the:
+                        </p>
+                        <ul class="fragment">
+                            <li>MAJOR version when you make incompatible API changes,</li>
+                            <li>MINOR version when you add functionality in a backwards-compatible manner, and</li>
+                            <li>PATCH version when you make backwards-compatible bug fixes.</li>
+                        </ul>
+                        <p class="fragment">
+                            To start: set initial development release at 0.1.0 and increment minor version for subsequent releases.
+                        </p>
+                    </section>
+      
+                    <section>
+                        <h3>Contents of <code>_version.py</code>:</h3>
+                        <br/>
+                        <pre><code data-trim class="python">
+                            __version_info__ = (0, 4, 2, 'a1')
+                            __version__ = '.'.join(map(str, __version_info__[:3]))
+                            if len(__version_info__) == 4:
+                                __version__ += __version_info__[-1]
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>Then in <code>pyproject.toml</code>:</h3>
+                        <br/>
+                        <pre><code data-trim class="toml">
+                            [project]
+                            dynamic = ["version"]
+
+                            [tool.hatch]
+                            version.path = "src/<package>/_version.py"
+                        </code></pre>
+                    </section>
+                </section>
             </div>
         </div>
 
