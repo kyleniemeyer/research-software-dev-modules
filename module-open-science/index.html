@@ -1,26 +1,18 @@
 <!doctype html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
         <title>Open Practices and Software Citation</title>
 
-        <link rel="stylesheet" href="css/reset.css">
-        <link rel="stylesheet" href="css/reveal.css">
-        <link rel="stylesheet" href="css/theme/white.css">
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+        <link rel="stylesheet" href="dist/theme/white.css">
 
         <!-- Theme used for syntax highlighting of code -->
-        <link rel="stylesheet" href="lib/css/monokai.css">
+        <link rel="stylesheet" href="plugin/highlight/monokai.css">
 
-        <!-- Printing and PDF exports -->
-        <script>
-            var link = document.createElement( 'link' );
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-            document.getElementsByTagName( 'head' )[0].appendChild( link );
-        </script>
     </head>
     <body>
         <div class="reveal">
@@ -191,6 +183,30 @@
                     </section>
 
                     <section>
+                        <h3>How to make your software citable?</h3>
+                        <p class="fragment">Add a <code>CITATION.cff</code> file:</p>
+                        <div style="font-size:36px">
+                        <pre class="fragment"><code data-trim class="text">
+                            cff-version: 1.2.0
+                            message: "Please cite the following works when using this software."
+                            type: software
+                            title: Title
+                            abstract: Title
+                            authors:
+                            - family-names: ...
+                              given-names: ...
+                              orcid: ...
+                              affiliation: ...
+                            doi: ...
+                            repository-code: ...
+                            url: ...
+                            keywords: ...
+                            license: ...
+                        </code></pre>
+                        </div>
+                    </section>
+
+                    <section>
                         <p>For research, need one more step: <strong>archiving</strong> software (or data)</p>
                         
                         <p class="fragment">Consider: what if you use/cite software, and someone modifies it?</p>
@@ -354,26 +370,30 @@
                             <img class="plain" width="75%" data-src="./images/joss-reviews.png">
                         </a>
                     </section>
+
+                    <section>
+                        <h3>Also consider submitting a talk/paper to SciPy!</h3>
+                    </section>
                     
                 </section>
 
             </div>
         </div>
 
-        <script src="js/reveal.js"></script>
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
 
-        <script>
-            // More info about config & dependencies:
-            // - https://github.com/hakimel/reveal.js#configuration
-            // - https://github.com/hakimel/reveal.js#dependencies
-            Reveal.initialize({
-                dependencies: [
-                    { src: 'plugin/markdown/marked.js' },
-                    { src: 'plugin/markdown/markdown.js' },
-                    { src: 'plugin/notes/notes.js', async: true },
-                    { src: 'plugin/highlight/highlight.js', async: true }
-                ]
-            });
-        </script>
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
     </body>
 </html>
