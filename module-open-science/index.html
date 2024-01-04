@@ -216,8 +216,24 @@
                         <img class="plain" width="100%" data-src="./images/archiving.png">
                     </section>
                     <section>
+                        <h3>Zenodo + GitHub = ❤️</h3>
+                        <br/>
+                        <p class="fragment">Zenodo can be connected to GitHub, and set to automatically archive releases</p>
+                    </section>
+                    <section>
                         <p>Live demo time... connecting GitHub to Zenodo</p>
                         <img class="plain" width="70%" data-src="./images/live-demo.jpeg">
+                    </section>
+                    <section>
+                        <h3>Recommended workflow:</h3>
+                        <br/>
+                        <ul>
+                            <li><code>git tag -a v0.0.1 -m "version 0.0.1"</code></li>
+                            <li><code>git push origin --tags</code></li>
+                            <li>Go to GitHub repo -> Releases -> v0.0.1</li>
+                            <li>Create release from tag</li>
+                            <li>Grab the DOI from Zenodo!</li>
+                        </ul>
                     </section>
                 </section>
 
