@@ -435,31 +435,41 @@
                       </section>
                       <section>
                           <h3>Contents of <code>sphinx.yml</code>:</h3>
-                          <pre class="stretch" style="font-size:20px"><code data-trim class='yaml'>
-                              name: "Sphinx: Render docs"
-      
-                              on: push
-                              
-                              jobs:
-                                build:
-                                  runs-on: ubuntu-latest
-                                  permissions:
-                                    contents: write
-                                  steps:
-                                  - uses: actions/checkout@v4
-                                  - name: Build HTML
-                                    uses: ammaraskar/sphinx-action@master
-                                  - name: Upload artifacts
-                                    uses: actions/upload-artifact@v4
-                                    with:
-                                      name: html-docs
-                                      path: docs/build/html/
-                                  - name: Deploy
-                                    uses: peaceiris/actions-gh-pages@v3
-                                    if: github.ref == 'refs/heads/main'
-                                    with:
-                                      github_token: ${{ secrets.GITHUB_TOKEN }}
-                                      publish_dir: docs/build/html
+                          <pre class="stretch" style="font-size:16px"><code data-trim class='yaml'>
+                            name: "Sphinx: Render docs"
+
+                            on: push
+                            
+                            jobs:
+                              build:
+                                runs-on: ubuntu-latest
+                                permissions:
+                                  contents: write
+                                steps:
+                                - uses: actions/checkout@v4
+                                - name: Set up Python
+                                  uses: actions/setup-python@v2
+                                  with:
+                                    python-version: '3.12'
+                                - name: Install dependencies
+                                  run: |
+                                    python3 -m pip install --upgrade pip
+                                    pip install . sphinx myst_parser
+                                - name: Build HTML
+                                  run: |
+                                    cd docs
+                                    make html
+                                - name: Upload artifacts
+                                  uses: actions/upload-artifact@v4
+                                  with:
+                                    name: html-docs
+                                    path: docs/build/html/
+                                - name: Deploy
+                                  uses: peaceiris/actions-gh-pages@v3
+                                  if: github.ref == 'refs/heads/main'
+                                  with:
+                                    github_token: ${{ secrets.GITHUB_TOKEN }}
+                                    publish_dir: docs/build/html
                           </code></pre>
                       </section>
                       <section data-markdown>
